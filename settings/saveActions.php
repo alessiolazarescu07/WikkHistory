@@ -1,24 +1,31 @@
 <?php
 session_start();
-require '../settings/database.php';
+require 'database.php';
 
+if (!isset($_SESSION['user_id']) || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+    die(json_encode(['status' => 'error', 'message' => 'Unauthorized']));
+}
+
+$user_id = $_SESSION['user_id'];
+$monument_id = $_POST['monument_id'];
+$note_text = $_POST['note_text'];
+$rating = (int)$_POST['rating'];
+$monument_name = $_POST['monument_name'];
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+    // 1. Inserisce o aggiorna l'appunto
+    $sql = "INSERT INTO notes (user_id, monument_id, note_text, rating) 
+            VALUES (?, ?, ?, ?) 
+            ON DUPLICATE KEY UPDATE note_text = VALUES(note_text), rating = VALUES(rating)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$user_id, $monument_id, $note_text, $rating]);
+
+    // 2. Registra l'attività (per il feed della dashboard)
+    $action_desc = "Updated notes for $monument_name (Rating: $rating/5)";
+    $stmt_act = $pdo->prepare("INSERT INTO recent_activities (action_description, created_at) VALUES (?, NOW())");
+    $stmt_act->execute([$action_desc]);
+
+    echo json_encode(['status' => 'success']);
 } catch (PDOException $e) {
-    die(json_encode(['status' => 'error', 'message' => 'Connection failed']));
+    echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-    $action = $_POST['action_text'];
-    $monument = $_POST['monument_id'];
-
-    $stmt = $pdo->prepare("INSERT INTO recent_activities (user_id, action_text, monument_id) VALUES (?, ?, ?)");
-    if ($stmt->execute([$user_id, $action, $monument])) {
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error']);
-    }
-}
-?>
