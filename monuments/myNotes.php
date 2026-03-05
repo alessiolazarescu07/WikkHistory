@@ -2,16 +2,23 @@
 session_start();
 require '../settings/database.php';
 
-// Protezione pagina
-
+// 1. Protezione pagina: Reindirizzamento se non loggato
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../index.php");
+    exit();
+}
 
 $user_id = $_SESSION['user_id'];
 
-// Recupero di tutte le note dell'utente con una JOIN (opzionale se hai una tabella monumenti)
-// Qui usiamo la tabella 'notes' che abbiamo sistemato prima
-$stmt = $pdo->prepare("SELECT * FROM notes WHERE user_id = ? ORDER BY updated_at DESC");
-$stmt->execute([$user_id]);
-$myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// 2. Recupero note: Usiamo 'monument_name' e 'created_at' che abbiamo allineato nel DB
+try {
+    $stmt = $pdo->prepare("SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC");
+    $stmt->execute([$user_id]);
+    $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Errore nel caricamento degli archivi: " . $e->getMessage();
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,18 +32,19 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         :root { 
             --gold: #aa8b56; 
+            --gold-bright: #d4af37;
             --glass: rgba(255, 255, 255, 0.08);
         }
 
         body {
             font-family: 'Titillium Web', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9)), 
+            background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.92)), 
                         url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
             background-size: cover; background-attachment: fixed;
-            color: white; margin: 0; padding: 40px;
+            color: white; margin: 0; padding: 20px;
         }
 
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1100px; margin: 40px auto; }
 
         .header {
             display: flex;
@@ -47,7 +55,7 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             padding-bottom: 20px;
         }
 
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; }
+        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 1.8rem; }
 
         .btn-back {
             text-decoration: none;
@@ -57,13 +65,14 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 8px;
             border: 1px solid var(--gold);
             transition: 0.3s;
+            font-weight: 600;
         }
 
         .btn-back:hover { background: var(--gold); color: black; }
 
         .notes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
         }
 
@@ -73,10 +82,12 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 20px;
             padding: 25px;
             backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
-        .note-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .note-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
         .note-header {
             display: flex;
@@ -88,34 +99,46 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .monument-name {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin: 0;
+            line-height: 1.2;
+            flex: 1;
+            padding-right: 10px;
         }
 
-        .rating { color: #d4af37; font-size: 0.9rem; }
+        .rating { color: var(--gold-bright); font-size: 0.8rem; white-space: nowrap; }
 
         .note-text {
             font-style: italic;
             line-height: 1.6;
-            color: #ddd;
+            color: #eee;
             margin-bottom: 20px;
-            min-height: 60px;
+            flex-grow: 1;
+            border-left: 2px solid var(--gold);
+            padding-left: 15px;
         }
 
         .note-footer {
-            font-size: 0.8rem;
-            color: rgba(255,255,255,0.4);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
         }
 
         .empty-state {
             text-align: center;
-            padding: 50px;
+            padding: 80px 20px;
             background: var(--glass);
             border-radius: 20px;
             grid-column: 1 / -1;
+            border: 1px dashed var(--gold);
+        }
+
+        @media (max-width: 600px) {
+            .header { flex-direction: column; gap: 20px; text-align: center; }
         }
     </style>
 </head>
@@ -123,8 +146,8 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="header">
-        <h1>Archivio Scoperte</h1>
-        <a href="../dashboard.php" class="btn-back"><i class="fa fa-arrow-left"></i> Torna alla Mappa</a>
+        <h1><i class="fa fa-scroll"></i> Diario dell'Archeologo</h1>
+        <a href="../dashboard.php" class="btn-back"><i class="fa fa-map-marked-alt"></i> Torna alla Mappa</a>
     </div>
 
     <div class="notes-grid">
@@ -133,14 +156,11 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="note-card">
                     <div class="note-header">
                         <h3 class="monument-name">
-                            <?php 
-                            // Rendiamo l'ID più leggibile (es. porta_palatina -> Porta Palatina)
-                            echo ucwords(str_replace('_', ' ', $note['monument_id'])); 
-                            ?>
+                            <?php echo htmlspecialchars($note['monument_name'] ?: ucwords(str_replace('_', ' ', $note['monument_id']))); ?>
                         </h3>
                         <div class="rating">
                             <?php for($i=1; $i<=5; $i++): ?>
-                                <i class="fa<?php echo ($i <= $note['rating']) ? '-solid' : '-regular'; ?> fa-star"></i>
+                                <i class="<?php echo ($i <= $note['rating']) ? 'fa-solid' : 'fa-regular'; ?> fa-star"></i>
                             <?php endfor; ?>
                         </div>
                     </div>
@@ -150,16 +170,19 @@ $myNotes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </div>
 
                     <div class="note-footer">
-                        <span><i class="fa fa-calendar-alt"></i> <?php echo date('d M Y', strtotime($note['updated_at'])); ?></span>
-                        <span><i class="fa fa-id-badge"></i> ID: <?php echo htmlspecialchars($note['monument_id']); ?></span>
+                        <span><i class="fa fa-calendar-day"></i> <?php echo date('d/m/Y H:i', strtotime($note['created_at'])); ?></span>
+                        <span style="text-transform: uppercase; letter-spacing: 1px;">
+                            <i class="fa fa-fingerprint"></i> <?php echo htmlspecialchars($note['monument_id']); ?>
+                        </span>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
             <div class="empty-state">
-                <i class="fa fa-feather-alt" style="font-size: 3rem; color: var(--gold); margin-bottom: 20px;"></i>
-                <p>Non hai ancora registrato nessuna scoperta. Esplora la mappa e scrivi la tua prima nota!</p>
-                <a href="dashboard.php" style="color: var(--gold);">Vai alla mappa</a>
+                <i class="fa fa-compass" style="font-size: 4rem; color: var(--gold); margin-bottom: 20px; opacity: 0.5;"></i>
+                <h2 style="font-family: 'Cinzel'; color: var(--gold);">Nessun reperto nel diario</h2>
+                <p style="opacity: 0.7; margin-bottom: 25px;">Il tuo registro è ancora vuoto. Visita i siti archeologici di Torino sulla mappa per iniziare la tua cronaca.</p>
+                <a href="../dashboard.php" class="btn-back">Inizia l'Esplorazione</a>
             </div>
         <?php endif; ?>
     </div>

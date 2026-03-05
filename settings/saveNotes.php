@@ -1,35 +1,46 @@
 <?php
+// settings/saveNotes.php
 session_start();
-require '../settings/database.php'; // Percorso corretto per uscire dalla cartella monuments
-
 header('Content-Type: application/json');
+require 'database.php';
 
+// Controllo sicurezza: l'utente deve essere loggato
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Non autorizzato']);
+    echo json_encode(['status' => 'error', 'message' => 'Sessione scaduta. Effettua il login.']);
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user_id = $_SESSION['user_id'];
-    $monument_id = $_POST['monument_id'];
-    $monument_name = $_POST['monument_name'];
-    $note_text = $_POST['note_text'];
-    $rating = (int)$_POST['rating'];
+    $user_name = $_SESSION['nome'] . " " . $_SESSION['cognome'];
+    $monument_id = $_POST['monument_id'] ?? '';
+    $monument_name = $_POST['monument_name'] ?? '';
+    $note_text = trim($_POST['note_text'] ?? '');
+    $rating = intval($_POST['rating'] ?? 0);
+
+    if (empty($note_text) || $rating === 0) {
+        echo json_encode(['status' => 'error', 'message' => 'Dati incompleti']);
+        exit();
+    }
 
     try {
-        // 1. Salva o aggiorna la nota
-        $stmt = $pdo->prepare("INSERT INTO notes (user_id, monument_id, note_text, rating) 
-                               VALUES (?, ?, ?, ?) 
-                               ON DUPLICATE KEY UPDATE note_text = ?, rating = ?, updated_at = CURRENT_TIMESTAMP");
-        $stmt->execute([$user_id, $monument_id, $note_text, $rating, $note_text, $rating]);
+        $pdo->beginTransaction();
 
-        // 2. Registra l'attività recente
-        $desc = "Hai aggiornato le note per: " . $monument_name;
+        // 1. Inserimento della nota
+        $stmt = $pdo->prepare("INSERT INTO notes (monument_id, monument_name, user_id, user_name, note_text, rating) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$monument_id, $monument_name, $user_id, $user_name, $note_text, $rating]);
+
+        // 2. Registrazione attività recente per la dashboard
+        $action = "Ha aggiunto una nota su: " . $monument_name;
         $stmtAct = $pdo->prepare("INSERT INTO recent_activities (user_id, action_description) VALUES (?, ?)");
-        $stmtAct->execute([$user_id, $desc]);
+        $stmtAct->execute([$user_id, $action]);
+
+        $pdo->commit();
 
         echo json_encode(['status' => 'success']);
     } catch (Exception $e) {
-        echo json_encode(['status' => 'error', 'message' => $e->getMessage()]);
+        $pdo->rollBack();
+        echo json_encode(['status' => 'error', 'message' => 'Errore nel salvataggio: ' . $e->getMessage()]);
     }
 }
+?>

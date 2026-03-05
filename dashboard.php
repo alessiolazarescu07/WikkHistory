@@ -4,7 +4,7 @@ require 'settings/database.php';
 
 // Reindirizzamento se non loggato
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -35,58 +35,142 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             --gold-bright: #d4af37;
             --glass: rgba(255, 255, 255, 0.08);
             --dark: #0f0f0f;
+            --sidebar-width: 280px;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Titillium Web', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
                         url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover; background-attachment: fixed; color: white; display: flex; margin:0;
+            background-size: cover; background-attachment: fixed; 
+            color: white; margin: 0; display: flex; min-height: 100vh;
         }
 
+        /* --- SIDEBAR & MOBILE NAV --- */
         .sidebar { 
-            width: 280px; background: rgba(0, 0, 0, 0.9); padding: 40px 20px; 
-            display: flex; flex-direction: column; border-right: 1px solid var(--gold); height: 100vh; position: sticky; top:0;
+            width: var(--sidebar-width); background: rgba(0, 0, 0, 0.95); padding: 40px 20px; 
+            display: flex; flex-direction: column; border-right: 1px solid var(--gold); 
+            height: 100vh; position: sticky; top: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001;
         }
-        .sidebar h2 { font-family: 'Cinzel', serif; color: var(--gold); text-align: center; margin-bottom: 40px; }
-        .nav-link { color: #ccc; text-decoration: none; padding: 15px; margin-bottom: 10px; border-radius: 12px; transition: 0.3s; display: flex; align-items: center; cursor: pointer; border: 1px solid transparent; }
+
+        .mobile-header {
+            display: none; background: #000; padding: 15px 20px;
+            justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--gold); position: fixed; top: 0; width: 100%; z-index: 1002;
+        }
+
+        .sidebar h2 { font-family: 'Cinzel', serif; color: var(--gold); text-align: center; margin-bottom: 40px; font-size: 1.8rem; }
+        
+        .nav-link { 
+            color: #ccc; text-decoration: none; padding: 15px; margin-bottom: 10px; 
+            border-radius: 12px; transition: 0.3s; display: flex; align-items: center; 
+            border: 1px solid transparent; cursor: pointer;
+        }
         .nav-link i { margin-right: 15px; color: var(--gold); width: 20px; }
         .nav-link:hover, .nav-link.active { background: var(--glass); border-color: var(--gold); color: white; }
 
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center; }
-        .stat-card i { color: var(--gold); font-size: 1.5rem; margin-bottom: 10px; }
+        /* --- MAIN CONTENT --- */
+        .main-content { flex: 1; padding: 40px; width: 100%; }
+
+        .stats-row { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; margin-bottom: 30px; 
+        }
+        .stat-card { 
+            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 25px; border-radius: 15px; text-align: center;
+            backdrop-filter: blur(5px); transition: transform 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+        .stat-card i { color: var(--gold); font-size: 1.8rem; margin-bottom: 10px; }
 
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
-        #map { height: 500px; border-radius: 20px; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        .activity-feed { background: var(--glass); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.1); max-height: 550px; overflow-y: auto; }
-        .activity-item { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; display: flex; gap: 10px; }
-        .activity-item i { color: var(--gold-bright); }
+        #map { 
+            height: 550px; border-radius: 20px; border: 1px solid var(--gold); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; z-index: 1;
+        }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); align-items: center; justify-content: center; }
-        .modal-content { background: #1a1a1a; width: 90%; max-width: 550px; padding: 30px; border-radius: 20px; border: 1px solid var(--gold); position: relative;}
-        .rating { color: #444; font-size: 1.5rem; margin: 15px 0; }
-        .rating i { cursor: pointer; transition: 0.2s; }
+        .activity-feed { 
+            background: var(--glass); border-radius: 20px; padding: 25px; 
+            border: 1px solid rgba(255,255,255,0.1); height: fit-content; max-height: 600px; overflow-y: auto;
+        }
+
+        /* --- POPUP MAPPA --- */
+        .leaflet-popup-content-wrapper { background: #1a1a1a; color: white; border: 1px solid var(--gold); border-radius: 12px; }
+        .leaflet-popup-tip { background: var(--gold); }
+        .popup-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--gold); }
+        .popup-btn { background: var(--gold); color: black; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; transition: 0.3s; }
+        .popup-btn:hover { background: white; }
+
+        /* --- MODALE --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #1a1a1a; width: 100%; max-width: 550px; padding: 30px; border-radius: 20px; border: 1px solid var(--gold); position: relative; max-height: 90vh; overflow-y: auto; }
+        .rating { color: #444; font-size: 1.8rem; margin: 10px 0; text-align:center; }
+        .rating i { cursor: pointer; transition: 0.2s; padding: 0 5px; }
         .rating i.active { color: var(--gold-bright); }
-        textarea { width: 100%; height: 150px; background: #222; color: white; border: 1px solid var(--gold); padding: 15px; border-radius: 10px; margin: 15px 0; resize: none; font-family: inherit; }
-        .btn-save { background: var(--gold); color: black; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        
+        textarea { width: 100%; height: 100px; background: #222; color: white; border: 1px solid var(--gold); padding: 15px; border-radius: 10px; margin: 10px 0; resize: none; font-family: inherit; font-size: 16px; }
+        
+        #publicNotesList { 
+            margin-top: 20px; 
+            max-height: 250px; 
+            overflow-y: auto; 
+            border-top: 1px solid rgba(170, 139, 86, 0.3);
+            padding-top: 15px;
+        }
+
+        .note-item {
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .btn-save { background: var(--gold); color: black; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 1rem; }
         .btn-save:hover { background: white; }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: fixed; left: -100%; width: 100%; height: 100vh; top: 0; padding-top: 80px; }
+            .sidebar.active { left: 0; }
+            .mobile-header { display: flex; }
+            .main-content { padding: 100px 20px 40px 20px; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .close-menu { position: absolute; top: 25px; right: 25px; font-size: 2rem; color: var(--gold); display: block; }
+        }
+        .close-menu { display: none; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="mobile-header">
+        <span style="font-family:'Cinzel'; color:var(--gold); font-size:1.2rem;">WikkHistory</span>
+        <i class="fa fa-bars" style="font-size:1.5rem; color:var(--gold); cursor:pointer;" onclick="toggleSidebar()"></i>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <i class="fa fa-times close-menu" onclick="toggleSidebar()"></i>
         <h2>WikkHistory</h2>
         <nav>
             <a class="nav-link active"><i class="fa fa-home"></i> Homepage</a>
             <a href="monuments/myNotes.php" class="nav-link"><i class="fa fa-book"></i> I Miei Appunti</a>
         </nav>
-        <a href="logout.php" style="margin-top:auto; color:#ff4d4d; text-decoration:none;"><i class="fa fa-sign-out-alt"></i> Logout</a>
+        <a href="logout.php" style="margin-top:auto; color:#ff4d4d; text-decoration:none; padding:15px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="main-content">
+        <div style="text-align:center; margin-bottom:35px;">
+            <h1 style="font-family:'Cinzel'; color:var(--gold); margin-bottom:5px; font-size:clamp(1.5rem, 5vw, 2.5rem);">
+                Bentornato, <?php echo htmlspecialchars($fullName); ?>
+            </h1>
+            <p style="opacity:0.7; letter-spacing: 1px;">Custode delle memorie di Augusta Taurinorum</p>
+        </div>
+
         <div class="stats-row">
             <div class="stat-card"><i class="fa fa-map-marked-alt"></i><h3>17</h3><p>Siti Archeologici</p></div>
             <div class="stat-card"><i class="fa fa-pen-nib"></i><h3 id="stat-notes"><?php echo $totalNotes; ?></h3><p>Note Salvate</p></div>
@@ -95,10 +179,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
         <div class="dashboard-grid">
             <div class="map-section">
-                <div style="text-align:center; margin-bottom:20px; font-size:1.6rem; color:var(--gold);">
-                    Bentornato, <b><?php echo htmlspecialchars($fullName); ?></b>
-                </div>
-                <h2 style="font-family:'Cinzel'; margin-bottom:15px;">Mappa Augusta Taurinorum</h2>
+                <h2 style="font-family:'Cinzel'; margin-bottom:15px; font-size:1.3rem; border-left: 3px solid var(--gold); padding-left: 15px;">Mappa dei Ritrovamenti</h2>
                 <div id="map"></div>
             </div>
 
@@ -112,17 +193,16 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
                     if ($activities):
                         foreach ($activities as $row): ?>
-                            <div class='activity-item'>
-                                <i class='fa fa-history'></i> 
+                            <div class='activity-item' style="padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; display: flex; gap: 10px;">
+                                <i class='fa fa-history' style="color:var(--gold-bright); margin-top:3px;"></i> 
                                 <span>
-                                    <?php echo htmlspecialchars($row['action_description']); ?> 
-                                    <br>
+                                    <?php echo htmlspecialchars($row['action_description']); ?> <br>
                                     <small style='opacity:0.5'><?php echo date('d/m/Y H:i', strtotime($row['created_at'])); ?></small>
                                 </span>
                             </div>
                         <?php endforeach;
                     else: ?>
-                        <p style="opacity:0.5; padding:10px;">Nessuna attività recente.</p>
+                        <p style="opacity:0.5; padding:10px;">Nessuna attività recente nel registro.</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -131,7 +211,11 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
     <div id="notesModal" class="modal">
         <div class="modal-content">
-            <h2 id="modalTitle" style="color:var(--gold); font-family: 'Cinzel', serif;">Nome Sito</h2>
+            <h2 id="modalTitle" style="color:var(--gold); font-family: 'Cinzel', serif; margin-top:0; text-align:center;">Nome Sito</h2>
+            
+            <div id="publicNotesList"></div>
+
+            <h4 style="color:var(--gold); margin: 20px 0 5px 0; font-size:0.9rem; text-transform:uppercase; border-top:1px solid #333; padding-top:15px;">Aggiungi la tua osservazione</h4>
             <div class="rating" id="ratingStars">
                 <i class="fa fa-star" data-value="1"></i>
                 <i class="fa fa-star" data-value="2"></i>
@@ -139,9 +223,10 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 <i class="fa fa-star" data-value="4"></i>
                 <i class="fa fa-star" data-value="5"></i>
             </div>
-            <textarea id="noteText" placeholder="Scrivi qui le tue scoperte..."></textarea>
+            <textarea id="noteText" placeholder="Trascrivi qui le tue osservazioni archeologiche..."></textarea>
+            
             <button id="btnSave" class="btn-save" onclick="saveData()">Sincronizza Esperienza <i class="fa fa-sync"></i></button>
-            <button onclick="closeModal()" style="background:none; border:none; color:grey; width:100%; margin-top:10px; cursor:pointer;">Chiudi</button>
+            <button onclick="closeModal()" style="background:none; border:none; color:grey; width:100%; margin-top:15px; cursor:pointer; font-size:0.9rem;">Annulla e Chiudi</button>
         </div>
     </div>
 
@@ -150,34 +235,49 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
         let currentMonumentId = '';
         let currentRating = 0;
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Inizializzazione Mappa
         const map = L.map('map').setView([45.0715, 7.6840], 15);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
 
         const monumenti = [
-            { id: 'porta_decumana', name: "Porta Decumana (Palazzo Madama)", coords: [45.0709, 7.6862] },
-            { id: 'foro_romano', name: "Foro Romano", coords: [45.0725, 7.6825] },
-            { id: 'necropol_carignano', name: "Necropoli Palazzo Carignano", coords: [45.0689, 7.6861] },
-            { id: 'necropoli_san_carlo', name: "Necropoli Piazza San Carlo", coords: [45.0677, 7.6824] },
-            { id: 'necropoli_dora', name: "Necropoli oltre la Dora", coords: [45.0800, 7.6860] },
-            { id: 'tomba_cernaia', name: "Tomba Via Cernaia", coords: [45.0695, 7.6745] },
-            { id: 'tomba_cenisia', name: "Tomba Borgata Cenisia", coords: [45.0665, 7.6585] },
-            { id: 'necropoli_fanciullo', name: "Necropoli e Tomba Fanciullo", coords: [45.0755, 7.6830] },
-            { id: 'teatro_romano', name: "Teatro Romano", coords: [45.0741, 7.6858] },
-            { id: 'porta_palatina', name: "Porta Palatina", coords: [45.0748, 7.6844] },
-            { id: 'domus_bonelli', name: "Domus Via Bonelli 11", coords: [45.0732, 7.6798] },
-            { id: 'domus_castello', name: "Domus Piazza Castello 51", coords: [45.0720, 7.6855] },
-            { id: 'domus_garibaldi', name: "Domus Via Garibaldi 18", coords: [45.0718, 7.6805] },
-            { id: 'domus_san_carlo', name: "Domus Piazza San Carlo", coords: [45.0673, 7.6828] },
-            { id: 'domus_bellezia', name: "Domus Via Bellezia 16", coords: [45.0740, 7.6812] },
-            { id: 'domus_orfane', name: "Domus Via delle Orfane 20", coords: [45.0735, 7.6791] },
-            { id: 'torre_consolata', name: "Torre Angolare", coords: [45.0763, 7.6795] }
+            { id: 'porta_decumana', name: "Porta Decumana (Palazzo Madama)", coords: [45.0709, 7.6862], img: "img/monuments/porta_decumana.jpg" },
+            { id: 'foro_romano', name: "Foro Romano", coords: [45.0725, 7.6825], img: "img/monuments/foro_romano.jpg" },
+            { id: 'necropol_carignano', name: "Necropoli Palazzo Carignano", coords: [45.0689, 7.6861], img: "img/monuments/necropol_carignano.jpg" },
+            { id: 'necropoli_san_carlo', name: "Necropoli Piazza San Carlo", coords: [45.0677, 7.6824], img: "img/monuments/necropoli_san_carlo.jpg" },
+            { id: 'necropoli_dora', name: "Necropoli oltre la Dora", coords: [45.0800, 7.6860], img: "img/monuments/necropoli_dora.jpg" },
+            { id: 'tomba_cernaia', name: "Tomba Via Cernaia", coords: [45.0695, 7.6745], img: "img/monuments/tomba_cernaia.jpg" },
+            { id: 'tomba_cenisia', name: "Tomba Borgata Cenisia", coords: [45.0665, 7.6585], img: "img/monuments/tomba_cenisia.jpg" },
+            { id: 'necropoli_fanciullo', name: "Necropoli e Tomba Fanciullo", coords: [45.0755, 7.6830], img: "img/monuments/necropoli_fanciullo.jpg" },
+            { id: 'teatro_romano', name: "Teatro Romano", coords: [45.0741, 7.6858], img: "img/monuments/teatro_romano.jpg" },
+            { id: 'porta_palatina', name: "Porta Palatina", coords: [45.0748, 7.6844], img: "img/monuments/porta_palatina.jpg" },
+            { id: 'domus_bonelli', name: "Domus Via Bonelli 11", coords: [45.0732, 7.6798], img: "img/monuments/domus_bonelli.jpg" },
+            { id: 'domus_castello', name: "Domus Piazza Castello 51", coords: [45.0720, 7.6855], img: "img/monuments/domus_castello.jpg" },
+            { id: 'domus_garibaldi', name: "Domus Via Garibaldi 18", coords: [45.0718, 7.6805], img: "img/monuments/domus_garibaldi.jpg" },
+            { id: 'domus_san_carlo', name: "Domus Piazza San Carlo", coords: [45.0673, 7.6828], img: "img/monuments/domus_san_carlo.jpg" },
+            { id: 'domus_bellezia', name: "Domus Via Bellezia 16", coords: [45.0740, 7.6812], img: "img/monuments/domus_bellezia.jpg" },
+            { id: 'domus_orfane', name: "Domus Via delle Orfane 20", coords: [45.0735, 7.6791], img: "img/monuments/domus_orfane.jpg" },
+            { id: 'torre_consolata', name: "Torre Angolare", coords: [45.0763, 7.6795], img: "img/monuments/torre_consolata.jpg" }
         ];
 
         monumenti.forEach(loc => {
-            L.marker(loc.coords).addTo(map).bindPopup(`<b>${loc.name}</b><br><button onclick="openNotes('${loc.id}', '${loc.name}')" style="margin-top:8px; cursor:pointer; padding: 5px 10px;">Dettagli / Note</button>`);
+            const popupContent = `
+                <div style="min-width: 200px;">
+                    <img src="${loc.img}" class="popup-img" alt="${loc.name}" onerror="this.src='https://via.placeholder.com/200x120?text=Immagine+Archeologica'">
+                    <b style="font-size:1.1rem; display:block; margin-bottom:5px;">${loc.name}</b>
+                    <button class="popup-btn" onclick="openNotes('${loc.id}', '${loc.name.replace(/'/g, "\\'")}')">
+                        <i class="fa fa-pen-nib"></i> Dettagli / Note
+                    </button>
+                </div>
+            `;
+            L.marker(loc.coords).addTo(map).bindPopup(popupContent);
         });
 
-        // Gestione click stelle
         document.querySelectorAll('#ratingStars i').forEach(star => {
             star.addEventListener('click', function() {
                 currentRating = this.dataset.value;
@@ -191,36 +291,64 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             });
         }
 
-        // Recupero Note esistenti
         async function openNotes(id, name) {
+            // Chiudi sidebar se mobile
+            const sidebar = document.getElementById('sidebar');
+            if(sidebar.classList.contains('active')) sidebar.classList.remove('active');
+            
             currentMonumentId = id;
             document.getElementById('modalTitle').innerText = name;
-            document.getElementById('noteText').value = "Caricamento archivi...";
+            document.getElementById('noteText').value = "";
             updateStars(0);
+            currentRating = 0;
+
+            const listContainer = document.getElementById('publicNotesList');
+            listContainer.innerHTML = "<p style='opacity:0.5; font-size:0.8rem;'><i class='fa fa-sync fa-spin'></i> Consultazione archivi in corso...</p>";
+            
             document.getElementById('notesModal').style.display = 'flex';
 
             try {
                 const response = await fetch(`settings/getNotes.php?id=${id}`);
                 const data = await response.json();
                 
-                if (data.status === 'success' && data.note) {
-                    document.getElementById('noteText').value = data.note.note_text;
-                    currentRating = data.note.rating;
-                    updateStars(currentRating);
+                listContainer.innerHTML = ""; 
+
+                if (data.status === 'success' && data.notes && data.notes.length > 0) {
+                    data.notes.forEach(nota => {
+                        const noteDiv = document.createElement('div');
+                        noteDiv.className = 'note-item';
+                        
+                        let starsHtml = "";
+                        const r = parseInt(nota.rating) || 0;
+                        for(let i=1; i<=5; i++) {
+                            starsHtml += `<i class="fa fa-star" style="color: ${i <= r ? '#d4af37' : '#444'}; font-size:0.7rem;"></i>`;
+                        }
+
+                        noteDiv.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                <strong style="color:var(--gold-bright); font-size:0.85rem;">${nota.user_name}</strong>
+                                <span>${starsHtml}</span>
+                            </div>
+                            <p style="margin:0; font-size:0.9rem; line-height:1.4;">${nota.note_text}</p>
+                            <small style="opacity:0.3; font-size:0.65rem;">${nota.created_at}</small>
+                        `;
+                        listContainer.appendChild(noteDiv);
+                    });
                 } else {
-                    document.getElementById('noteText').value = "";
+                    listContainer.innerHTML = "<p style='opacity:0.5; font-size:0.85rem; text-align:center; padding:10px;'>Ancora nessun resoconto per questo sito.</p>";
                 }
             } catch (e) {
-                document.getElementById('noteText').value = "";
-                console.error("Errore recupero note:", e);
+                listContainer.innerHTML = "<p style='color:red;'>Errore di connessione agli archivi.</p>";
+                console.error(e);
             }
         }
 
-        // Salvataggio Note
         function saveData() {
-            const note = document.getElementById('noteText').value;
+            const note = document.getElementById('noteText').value.trim();
+            if(!note) { alert("Inserisci un testo per la nota!"); return; }
+            if(currentRating == 0) { alert("Seleziona una valutazione (stelle)!"); return; }
+
             const btn = document.getElementById('btnSave');
-            
             btn.innerHTML = "Sincronizzazione... <i class='fa fa-spinner fa-spin'></i>";
             btn.disabled = true;
 
@@ -236,7 +364,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 if(data.status === 'success') {
                     location.reload(); 
                 } else {
-                    alert("Errore nel salvataggio: " + (data.message || "Sessione scaduta?"));
+                    alert("Errore: " + (data.message || "Impossibile salvare"));
                     btn.innerHTML = "Riprova <i class='fa fa-sync'></i>";
                     btn.disabled = false;
                 }
@@ -244,12 +372,16 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             .catch(err => {
                 alert("Errore di rete");
                 btn.disabled = false;
+                btn.innerHTML = "Riprova <i class='fa fa-sync'></i>";
             });
         }
 
         function closeModal() { document.getElementById('notesModal').style.display = 'none'; }
 
-        function exportNotes() { window.location.href = 'export_csv.php'; }
+        // Chiudi modale cliccando fuori
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('notesModal')) closeModal();
+        }
     </script>
 </body>
 </html>

@@ -1,12 +1,29 @@
 <?php
-session_start();
+// settings/getNotes.php
+header('Content-Type: application/json');
 require 'database.php';
 
-$user_id = $_SESSION['user_id'] ?? 0;
-$monument_id = $_GET['id'] ?? '';
+if (!isset($_GET['id'])) {
+    echo json_encode(['status' => 'error', 'message' => 'ID monumento mancante']);
+    exit();
+}
 
-$stmt = $pdo->prepare("SELECT note_text, rating FROM notes WHERE user_id = ? AND monument_id = ?");
-$stmt->execute([$user_id, $monument_id]);
-$note = $stmt->fetch(PDO::FETCH_ASSOC);
+$monument_id = $_GET['id'];
 
-echo json_encode(['status' => 'success', 'note' => $note]);
+try {
+    // Recuperiamo le note ordinate dalla più recente
+    $stmt = $pdo->prepare("SELECT user_name, note_text, rating, DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') as created_at 
+                           FROM notes 
+                           WHERE monument_id = ? 
+                           ORDER BY id DESC");
+    $stmt->execute([$monument_id]);
+    $notes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode([
+        'status' => 'success',
+        'notes' => $notes
+    ]);
+} catch (PDOException $e) {
+    echo json_encode(['status' => 'error', 'message' => 'Errore database: ' . $e->getMessage()]);
+}
+?>
