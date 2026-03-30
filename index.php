@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +40,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     <style>
         /* RESET & BASE */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
         
         body {
             font-family: 'Titillium Web', sans-serif;
@@ -48,8 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
-                        url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('img/background.jpg');
             background-size: cover;
             background-position: center;
             overflow: hidden;
@@ -81,18 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .logo-icon { 
-            width: 120px; 
-            margin-bottom: 20px; 
-            filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg); 
-        }
-
-        .brand-text {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #aa8b56;
-            letter-spacing: 5px;
-            text-shadow: 0 0 15px rgba(170, 139, 86, 0.5);
-            text-align: center;
+            width: 100%; 
         }
 
         .right-panel {
@@ -145,24 +137,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .login-btn {
+            width: 100%;
             background: #aa8b56;
             color: #1a1212;
-            padding: 18px;
+            padding: 16px;
             border: none;
-            border-radius: 15px;
-            font-size: 1.2rem;
+            border-radius: 12px;
+            font-size: 1.3rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 10px;
+            margin-top: 5px;
+            font-family: 'Titillium Web', sans-serif;
         }
-
         .login-btn:hover {
-            background: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(170, 139, 86, 0.4);
+            background: #1a1212;
+            color: #aa8b56;
+            border: #aa8b56 1px solid;
         }
 
         .footer-links {
@@ -170,6 +162,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-align: center;
             font-size: 0.9rem;
             color: rgba(255,255,255,0.6);
+            display: flex;
+            justify-content: space-between;
         }
 
         .footer-links a {
@@ -178,9 +172,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 700;
         }
 
+        .footer-links a:hover{
+            color: #fff;
+        }
+
         @media (max-width: 850px) {
-            .login-card { flex-direction: column; width: 90%; height: auto; }
-            .left-panel { border-right: none; border-bottom: 1px solid rgba(170,139,86,0.2); }
+            .login-card { 
+                flex-direction: column; 
+                width: 90%; 
+                height: auto; 
+            }
+
+            .left-panel { 
+                border-right: none; 
+                border-bottom: 1px solid rgba(170,139,86,0.2);
+            }
         }
     </style>
 </head>
@@ -188,12 +194,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="login-card">
         <div class="left-panel">
-            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="WikkHistory" class="logo-icon">
-            <div class="brand-text">WIKKHISTORY</div>
+            <img src="img/logo.png" alt="WikkHistory" class="logo-icon">
         </div>
 
         <div class="right-panel">
-            <h2>Accedi</h2>
+            <h2>Sign In</h2>
             
             <?php if ($error_msg): ?>
                 <p style="color: #ff6b6b; margin-bottom: 20px; font-weight: bold;"><?php echo $error_msg; ?></p>
@@ -202,7 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="POST" style="display: flex; flex-direction: column;">
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" name="user" placeholder="Username o Email" required>
+                    <input type="text" name="user" placeholder="Username or Email" required>
                 </div>
 
                 <div class="input-group">
@@ -210,12 +215,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
 
-                <button type="submit" class="login-btn">Entra</button>
+                <button type="submit" class="login-btn">LOGIN</button>
             </form>
 
             <div class="footer-links">
-                Password dimenticata? <a href="#">Recuperala</a><br><br>
-                Nuovo utente? <a href="auth/register.php">Registrati qui</a>
+                <div>
+                    Never been here before? <a href="auth/register.php">Sign Up</a>
+                </div>
+                <a href="auth/recovery.php">Forgot Password?</a>
             </div>
         </div>
     </div>

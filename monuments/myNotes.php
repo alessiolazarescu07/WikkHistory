@@ -22,11 +22,11 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I Miei Appunti | WikkHistory</title>
+    <title>My Notes | WikkHistory</title>
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -39,7 +39,7 @@ try {
         body {
             font-family: 'Titillium Web', sans-serif;
             background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.92)), 
-                        url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
+                        url('../img/background.jpg');
             background-size: cover; background-attachment: fixed;
             color: white; margin: 0; padding: 20px;
         }
@@ -55,7 +55,12 @@ try {
             padding-bottom: 20px;
         }
 
-        h1 { font-family: 'Cinzel', serif; color: var(--gold); margin: 0; font-size: 1.8rem; }
+        h1 { 
+            font-family: 'Cinzel', serif; 
+            color: var(--gold); 
+            margin: 0; 
+            font-size: 1.8rem; 
+        }
 
         .btn-back {
             text-decoration: none;
@@ -68,7 +73,10 @@ try {
             font-weight: 600;
         }
 
-        .btn-back:hover { background: var(--gold); color: black; }
+        .btn-back:hover { 
+            background: var(--gold); 
+            color: black; 
+        }
 
         .notes-grid {
             display: grid;
@@ -87,7 +95,11 @@ try {
             flex-direction: column;
         }
 
-        .note-card:hover { transform: translateY(-5px); border-color: var(--gold); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .note-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--gold); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); 
+        }
 
         .note-header {
             display: flex;
@@ -106,7 +118,11 @@ try {
             padding-right: 10px;
         }
 
-        .rating { color: var(--gold-bright); font-size: 0.8rem; white-space: nowrap; }
+        .rating { 
+            color: var(--gold-bright); 
+            font-size: 0.8rem; 
+            white-space: nowrap; 
+        }
 
         .note-text {
             font-style: italic;
@@ -140,14 +156,15 @@ try {
         @media (max-width: 600px) {
             .header { flex-direction: column; gap: 20px; text-align: center; }
         }
+
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1><i class="fa fa-scroll"></i> Diario dell'Archeologo</h1>
-        <a href="../dashboard.php" class="btn-back"><i class="fa fa-map-marked-alt"></i> Torna alla Mappa</a>
+        <h1><i class="fa fa-scroll"></i> My Archaeology Diary</h1>
+        <a href="../dashboard.php" class="btn-back"><i class="fa fa-map-marked-alt"></i> Back To Map</a>
     </div>
 
     <div class="notes-grid">
@@ -180,9 +197,9 @@ try {
         <?php else: ?>
             <div class="empty-state">
                 <i class="fa fa-compass" style="font-size: 4rem; color: var(--gold); margin-bottom: 20px; opacity: 0.5;"></i>
-                <h2 style="font-family: 'Cinzel'; color: var(--gold);">Nessun reperto nel diario</h2>
-                <p style="opacity: 0.7; margin-bottom: 25px;">Il tuo registro è ancora vuoto. Visita i siti archeologici di Torino sulla mappa per iniziare la tua cronaca.</p>
-                <a href="../dashboard.php" class="btn-back">Inizia l'Esplorazione</a>
+                <h2 style="font-family: 'Titillium Web', sans-serif; color: var(--gold);">No Notes Yet</h2>
+                <p style="opacity: 0.7; margin-bottom: 25px;">Your diary is still empty. Visit the archaeological sites in Turin on the map to start documenting your discoveries.</p>
+                <a href="../dashboard.php" class="btn-back">Start Exploring</a>
             </div>
         <?php endif; ?>
     </div>

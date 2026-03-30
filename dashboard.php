@@ -20,7 +20,7 @@ $totalNotes = $stats['total_notes'] ?? 0;
 $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 ?>
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,81 +38,232 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             --sidebar-width: 280px;
         }
 
-        * { box-sizing: border-box; }
+        * { 
+            box-sizing: border-box; 
+        }
 
         body {
             font-family: 'Titillium Web', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), 
-                        url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('img/background.jpg');
             background-size: cover; background-attachment: fixed; 
             color: white; margin: 0; display: flex; min-height: 100vh;
         }
 
-        /* --- SIDEBAR & MOBILE NAV --- */
         .sidebar { 
-            width: var(--sidebar-width); background: rgba(0, 0, 0, 0.95); padding: 40px 20px; 
-            display: flex; flex-direction: column; border-right: 1px solid var(--gold); 
-            height: 100vh; position: sticky; top: 0; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1001;
+            width: var(--sidebar-width); 
+            background: rgba(0, 0, 0, 0.95); 
+            padding: 40px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 1px solid var(--gold); 
+            height: 100vh; 
+            position: sticky; 
+            top: 0; 
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            z-index: 1001;
         }
 
         .mobile-header {
-            display: none; background: #000; padding: 15px 20px;
-            justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--gold); position: fixed; top: 0; width: 100%; z-index: 1002;
+            display: none; 
+            background: #000; 
+            padding: 15px 20px;
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--gold); 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            z-index: 1002;
         }
 
-        .sidebar h2 { font-family: 'Cinzel', serif; color: var(--gold); text-align: center; margin-bottom: 40px; font-size: 1.8rem; }
+        .sidebar h2 { 
+            font-family: 'Titillium Web', serif; 
+            color: var(--gold); 
+            text-align: center; 
+            margin-bottom: 40px; 
+            font-size: 1.8rem; 
+        }
         
         .nav-link { 
-            color: #ccc; text-decoration: none; padding: 15px; margin-bottom: 10px; 
-            border-radius: 12px; transition: 0.3s; display: flex; align-items: center; 
-            border: 1px solid transparent; cursor: pointer;
+            color: #ccc; 
+            text-decoration: none; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            border-radius: 12px; 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            border: 1px solid transparent; 
+            cursor: pointer;
         }
-        .nav-link i { margin-right: 15px; color: var(--gold); width: 20px; }
-        .nav-link:hover, .nav-link.active { background: var(--glass); border-color: var(--gold); color: white; }
 
-        /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 40px; width: 100%; }
+        .nav-link i { 
+            margin-right: 15px; 
+            color: var(--gold); 
+            width: 20px; 
+        }
+
+        .nav-link:hover, .nav-link.active { 
+            background: var(--glass); 
+            border-color: var(--gold); 
+            color: white;
+        }
+
+        .nav-link.active {
+            font-weight: bold; 
+        }
+
+        .main-content { 
+            flex: 1; 
+            padding: 40px; 
+            width: 100%; 
+        }
 
         .stats-row { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 20px; margin-bottom: 30px; 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 30px; 
         }
         .stat-card { 
-            background: var(--glass); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 25px; border-radius: 15px; text-align: center;
-            backdrop-filter: blur(5px); transition: transform 0.3s;
+            background: var(--glass); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 25px; 
+            border-radius: 15px; 
+            text-align: center;
+            backdrop-filter: blur(5px); 
+            transition: transform 0.3s;
         }
-        .stat-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-        .stat-card i { color: var(--gold); font-size: 1.8rem; margin-bottom: 10px; }
+        .stat-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--gold); 
+        }
+        .stat-card i { 
+            color: var(--gold); 
+            font-size: 1.8rem; 
+            margin-bottom: 10px; 
+        }
 
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; }
+        .dashboard-grid {
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 25px; }
 
         #map { 
-            height: 550px; border-radius: 20px; border: 1px solid var(--gold); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; z-index: 1;
+            height: 550px; 
+            border-radius: 20px; 
+            border: 1px solid var(--gold); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            width: 100%; 
+            z-index: 1;
         }
 
         .activity-feed { 
-            background: var(--glass); border-radius: 20px; padding: 25px; 
-            border: 1px solid rgba(255,255,255,0.1); height: fit-content; max-height: 600px; overflow-y: auto;
+            background: var(--glass); 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            backdrop-filter: blur(5px);
+            height: fit-content;
+            max-height: 600px; 
+            overflow-y: auto; 
+            border-color: var(--gold);
         }
 
         /* --- POPUP MAPPA --- */
-        .leaflet-popup-content-wrapper { background: #1a1a1a; color: white; border: 1px solid var(--gold); border-radius: 12px; }
-        .leaflet-popup-tip { background: var(--gold); }
-        .popup-img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--gold); }
-        .popup-btn { background: var(--gold); color: black; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px; transition: 0.3s; }
-        .popup-btn:hover { background: white; }
+        .leaflet-popup-content-wrapper {
+            background: #1a1a1a; 
+            color: white; border: 1px solid var(--gold); ù
+            border-radius: 12px; 
+        }
+
+        .leaflet-popup-tip { 
+            background: var(--gold); 
+        }
+
+        .popup-img { 
+            width: 100%; 
+            height: 120px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            margin-bottom: 10px; 
+            border: 1px solid var(--gold); 
+        }
+
+        .popup-btn {
+            background: var(--gold); 
+            color: black; 
+            border: none; 
+            padding: 10px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            margin-top: 5px; 
+            transition: 0.3s; 
+        }
+
+        .popup-btn:hover { 
+            background: white; 
+        }
 
         /* --- MODALE --- */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #1a1a1a; width: 100%; max-width: 550px; padding: 30px; border-radius: 20px; border: 1px solid var(--gold); position: relative; max-height: 90vh; overflow-y: auto; }
-        .rating { color: #444; font-size: 1.8rem; margin: 10px 0; text-align:center; }
-        .rating i { cursor: pointer; transition: 0.2s; padding: 0 5px; }
-        .rating i.active { color: var(--gold-bright); }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 2000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            backdrop-filter: blur(10px); 
+            align-items: center; 
+            justify-content: center; 
+            padding: 20px; 
+        }
+
+        .modal-content { 
+            background: #1a1a1a; 
+            width: 100%; 
+            max-width: 550px; 
+            padding: 30px; 
+            border-radius: 20px; 
+            border: 1px solid var(--gold); 
+            position: relative; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+
+        .rating { 
+            color: #444; 
+            font-size: 1.8rem; 
+            margin: 10px 0; 
+            text-align: center; 
+        }
+
+        .rating i { 
+            cursor: pointer; 
+            transition: 0.2s; 
+            padding: 0 5px; 
+        }
+
+        .rating i.active { 
+            color: var(--gold-bright); 
+        }
         
-        textarea { width: 100%; height: 100px; background: #222; color: white; border: 1px solid var(--gold); padding: 15px; border-radius: 10px; margin: 10px 0; resize: none; font-family: inherit; font-size: 16px; }
+        textarea { 
+            width: 100%; 
+            height: 100px; 
+            background: #222; 
+            color: white; 
+            border: 1px solid var(--gold); 
+            padding: 15px; 
+            border-radius: 10px; 
+            margin: 10px 0; 
+            resize: none; 
+            font-family: inherit; 
+            font-size: 16px; }
         
         #publicNotesList { 
             margin-top: 20px; 
@@ -130,8 +281,27 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             border-left: 3px solid var(--gold);
         }
 
-        .btn-save { background: var(--gold); color: black; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 1rem; }
-        .btn-save:hover { background: white; }
+        .btn-save { 
+            background: var(--gold); 
+            color: black; 
+            border: none; 
+            padding: 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            transition: 0.3s; 
+            font-size: 1rem; 
+        }
+
+        .btn-save:hover { 
+            background: white; 
+        }
+
+        .close-menu { 
+            display: none; 
+            cursor: pointer; 
+        }
 
         /* --- RESPONSIVE DESIGN --- */
         @media (max-width: 768px) {
@@ -143,48 +313,47 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             .dashboard-grid { grid-template-columns: 1fr; }
             .close-menu { position: absolute; top: 25px; right: 25px; font-size: 2rem; color: var(--gold); display: block; }
         }
-        .close-menu { display: none; cursor: pointer; }
+        
     </style>
 </head>
 <body>
 
     <div class="mobile-header">
-        <span style="font-family:'Cinzel'; color:var(--gold); font-size:1.2rem;">WikkHistory</span>
+        <span style="font-family:'Titillium Web'; color:var(--gold); font-size:1.2rem; font-weight: bold;">WIKKHISTORY</span>
         <i class="fa fa-bars" style="font-size:1.5rem; color:var(--gold); cursor:pointer;" onclick="toggleSidebar()"></i>
     </div>
 
     <div class="sidebar" id="sidebar">
         <i class="fa fa-times close-menu" onclick="toggleSidebar()"></i>
-        <h2>WikkHistory</h2>
+        <h2>WIKKHISTORY</h2>
         <nav>
-            <a class="nav-link active"><i class="fa fa-home"></i> Homepage</a>
-            <a href="monuments/myNotes.php" class="nav-link"><i class="fa fa-book"></i> I Miei Appunti</a>
+            <a class="nav-link active"><i class="fa fa-home"></i> Home Page</a>
+            <a href="monuments/myNotes.php" class="nav-link"><i class="fa fa-book"></i> My Notes</a>
         </nav>
         <a href="logout.php" style="margin-top:auto; color:#ff4d4d; text-decoration:none; padding:15px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <div class="main-content">
         <div style="text-align:center; margin-bottom:35px;">
-            <h1 style="font-family:'Cinzel'; color:var(--gold); margin-bottom:5px; font-size:clamp(1.5rem, 5vw, 2.5rem);">
-                Bentornato, <?php echo htmlspecialchars($fullName); ?>
+            <h1 style="font-family:'Titillium Web'; color:var(--gold); margin-bottom:5px; font-size:clamp(1.5rem, 5vw, 2.5rem);">
+                Welcome Back, <?php echo htmlspecialchars($fullName); ?>
             </h1>
-            <p style="opacity:0.7; letter-spacing: 1px;">Custode delle memorie di Augusta Taurinorum</p>
         </div>
 
         <div class="stats-row">
-            <div class="stat-card"><i class="fa fa-map-marked-alt"></i><h3>17</h3><p>Siti Archeologici</p></div>
-            <div class="stat-card"><i class="fa fa-pen-nib"></i><h3 id="stat-notes"><?php echo $totalNotes; ?></h3><p>Note Salvate</p></div>
-            <div class="stat-card"><i class="fa fa-star"></i><h3 id="stat-rating"><?php echo $avgRating; ?></h3><p>Valutazione Media</p></div>
+            <div class="stat-card"><i class="fa fa-map-marked-alt"></i><h3>17</h3><p>Archealogical Sites</p></div>
+            <div class="stat-card" onclick="window.location.href='monuments/myNotes.php'" style="cursor: pointer;"><i class="fa fa-pen-nib"></i><h3 id="stat-notes"><?php echo $totalNotes; ?></h3><p>Saved Notes</p></div>
+            <div class="stat-card"><i class="fa fa-star"></i><h3 id="stat-rating"><?php echo $avgRating; ?></h3><p>Average Rating</p></div>
         </div>
 
         <div class="dashboard-grid">
             <div class="map-section">
-                <h2 style="font-family:'Cinzel'; margin-bottom:15px; font-size:1.3rem; border-left: 3px solid var(--gold); padding-left: 15px;">Mappa dei Ritrovamenti</h2>
+                <h2 style="font-family:'Titillium Web'; margin-bottom:15px; font-size:1.3rem; border-left: 3px solid var(--gold); padding-left: 15px; font-weight: bold; color: var(--gold);">AUGUSTA TAURINORUM MAP</h2>
                 <div id="map"></div>
             </div>
 
             <div class="activity-feed">
-                <h3 style="font-family:'Cinzel'; margin-bottom:15px; color:var(--gold);">Attività Recenti</h3>
+                <h3 style="font-family:'Titillium Web'; margin-bottom:15px; font-size:1.3rem; border-left: 3px solid var(--gold); padding-left: 15px; font-weight: bold; color: var(--gold);">RECENT ACTIVITIES</h3>
                 <div id="activity-list">
                     <?php
                     $stmt = $pdo->prepare("SELECT action_description, created_at FROM recent_activities WHERE user_id = ? ORDER BY created_at DESC LIMIT 8");
@@ -202,7 +371,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                             </div>
                         <?php endforeach;
                     else: ?>
-                        <p style="opacity:0.5; padding:10px;">Nessuna attività recente nel registro.</p>
+                        <p style="opacity:0.5; padding:10px;">No recent activity</p>
                     <?php endif; ?>
                 </div>
             </div>
@@ -211,11 +380,11 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
     <div id="notesModal" class="modal">
         <div class="modal-content">
-            <h2 id="modalTitle" style="color:var(--gold); font-family: 'Cinzel', serif; margin-top:0; text-align:center;">Nome Sito</h2>
+            <h2 id="modalTitle" style="color:var(--gold); font-family: 'Titillium Web', serif; margin-top:0; text-align:center;">Site Name</h2>
             
             <div id="publicNotesList"></div>
 
-            <h4 style="color:var(--gold); margin: 20px 0 5px 0; font-size:0.9rem; text-transform:uppercase; border-top:1px solid #333; padding-top:15px;">Aggiungi la tua osservazione</h4>
+            <h4 style="color:var(--gold); margin: 20px 0 5px 0; font-size:0.9rem; text-transform:uppercase; border-top:1px solid #333; padding-top:15px;">ADD YOUR THOUGHTS</h4>
             <div class="rating" id="ratingStars">
                 <i class="fa fa-star" data-value="1"></i>
                 <i class="fa fa-star" data-value="2"></i>
@@ -223,10 +392,10 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 <i class="fa fa-star" data-value="4"></i>
                 <i class="fa fa-star" data-value="5"></i>
             </div>
-            <textarea id="noteText" placeholder="Trascrivi qui le tue osservazioni archeologiche..."></textarea>
+            <textarea id="noteText" placeholder="Write your thoughts here..."></textarea>
             
-            <button id="btnSave" class="btn-save" onclick="saveData()">Sincronizza Esperienza <i class="fa fa-sync"></i></button>
-            <button onclick="closeModal()" style="background:none; border:none; color:grey; width:100%; margin-top:15px; cursor:pointer; font-size:0.9rem;">Annulla e Chiudi</button>
+            <button id="btnSave" class="btn-save" onclick="saveData()">Save Note <i class="fa fa-sync"></i></button>
+            <button onclick="closeModal()" style="background:none; border:none; color:grey; width:100%; margin-top:15px; cursor:pointer; font-size:0.9rem;">Cancel & Close </button>
         </div>
     </div>
 
@@ -271,7 +440,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                     <img src="${loc.img}" class="popup-img" alt="${loc.name}" onerror="this.src='https://via.placeholder.com/200x120?text=Immagine+Archeologica'">
                     <b style="font-size:1.1rem; display:block; margin-bottom:5px;">${loc.name}</b>
                     <button class="popup-btn" onclick="openNotes('${loc.id}', '${loc.name.replace(/'/g, "\\'")}')">
-                        <i class="fa fa-pen-nib"></i> Dettagli / Note
+                        <i class="fa fa-pen-nib"></i> Details & Notes
                     </button>
                 </div>
             `;
@@ -335,7 +504,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                         listContainer.appendChild(noteDiv);
                     });
                 } else {
-                    listContainer.innerHTML = "<p style='opacity:0.5; font-size:0.85rem; text-align:center; padding:10px;'>Ancora nessun resoconto per questo sito.</p>";
+                    listContainer.innerHTML = "<p style='opacity:0.5; font-size:0.85rem; text-align:center; padding:10px;'>No notes available for this site</p>";
                 }
             } catch (e) {
                 listContainer.innerHTML = "<p style='color:red;'>Errore di connessione agli archivi.</p>";
@@ -376,7 +545,9 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             });
         }
 
-        function closeModal() { document.getElementById('notesModal').style.display = 'none'; }
+        function closeModal() { 
+            document.getElementById('notesModal').style.display = 'none'; 
+        }
 
         // Chiudi modale cliccando fuori
         window.onclick = function(event) {

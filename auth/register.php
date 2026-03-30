@@ -30,16 +30,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrati | WikkHistory</title>
+    <title>Register | WikkHistory</title>
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
         
         body {
             font-family: 'Titillium Web', sans-serif;
@@ -47,8 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
-                        url('https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../img/background.jpg');
             background-size: cover;
             background-position: center;
             overflow: hidden;
@@ -79,18 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .logo-icon { 
-            width: 100px; 
-            margin-bottom: 20px; 
-            filter: invert(1) sepia(1) saturate(5) hue-rotate(10deg); 
-        }
-
-        .brand-text {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #aa8b56;
-            letter-spacing: 5px;
-            text-shadow: 0 0 15px rgba(170, 139, 86, 0.5);
-            text-align: center;
+            width: 100%; 
         }
 
         .right-panel {
@@ -112,7 +104,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .input-row {
             display: flex;
             gap: 15px;
-            margin-bottom: 15px;
         }
 
         .input-group {
@@ -150,24 +141,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .register-btn {
+            width: 100%;
             background: #aa8b56;
             color: #1a1212;
             padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
             margin-top: 5px;
+            font-family: 'Titillium Web', sans-serif;
         }
 
         .register-btn:hover {
-            background: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(170, 139, 86, 0.4);
+            background: #1a1212;
+            color: #aa8b56;
+            border: #aa8b56 1px solid;
         }
 
         .msg {
@@ -193,6 +185,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: 700;
         }
 
+        .footer-links a:hover{
+            color: #fff;
+        }
+
         @media (max-width: 850px) {
             .register-card { flex-direction: column; width: 90%; height: auto; margin-top: 20px; overflow-y: auto; }
             .left-panel { border-right: none; border-bottom: 1px solid rgba(170,139,86,0.2); padding: 30px; }
@@ -204,12 +200,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="register-card">
         <div class="left-panel">
-            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="WikkHistory" class="logo-icon">
-            <div class="brand-text">UNISCITI ALLA<br>STORIA</div>
+            <img src="../img/logo.png" alt="WikkHistory" class="logo-icon">
         </div>
 
         <div class="right-panel">
-            <h2>Crea Account</h2>
+            <h2>Create Account</h2>
             
             <?php if ($msg): ?>
                 <div class="msg <?php echo $status; ?>">
@@ -221,22 +216,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-row">
                     <div class="input-group">
                         <i class="fa fa-id-card"></i>
-                        <input type="text" name="nome" placeholder="Nome" required>
+                        <input type="text" name="nome" placeholder="First Name" required>
                     </div>
                     <div class="input-group">
                         <i class="fa fa-id-card"></i>
-                        <input type="text" name="cognome" placeholder="Cognome" required>
+                        <input type="text" name="cognome" placeholder="Last Name" required>
                     </div>
                 </div>
 
                 <div class="input-group">
                     <i class="fa fa-user"></i>
-                    <input type="text" name="username" placeholder="Scegli un Username" required>
+                    <input type="text" name="username" placeholder="Username" required>
                 </div>
 
                 <div class="input-group">
                     <i class="fa fa-envelope"></i>
-                    <input type="email" name="email" placeholder="Email Istituzionale" required>
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
 
                 <div class="input-group">
@@ -246,14 +241,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <div class="input-group">
                     <i class="fa fa-circle-check"></i>
-                    <input type="password" name="confirm_password" placeholder="Conferma Password" required>
+                    <input type="password" name="confirm_password" placeholder="Confirm Password" required>
                 </div>
 
-                <button type="submit" class="register-btn">Registrati</button>
+                <button type="submit" class="register-btn">REGISTER</button>
             </form>
 
             <div class="footer-links">
-                Hai già un profilo attivo? <a href="../index.php">Accedi qui</a>
+                You look  familiar... <a href="../index.php">Sign In</a>
             </div>
         </div>
     </div>
