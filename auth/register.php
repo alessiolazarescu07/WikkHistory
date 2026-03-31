@@ -169,8 +169,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-weight: bold;
             font-size: 0.9rem;
         }
-        .msg.error { color: #ff6b6b; }
-        .msg.success { color: #51cf66; border: 1px solid #51cf66; background: rgba(81, 207, 102, 0.1); }
+        .msg.error {
+            color: #ff6b6b; 
+            border: 1px solid #ff6b6b; 
+            background: rgba(81, 207, 102, 0.1); 
+        }
+
+        .msg.success { 
+            color: #51cf66; 
+            border: 1px solid #51cf66; 
+            background: rgba(81, 207, 102, 0.1); 
+        }
 
         .footer-links {
             margin-top: 20px;
