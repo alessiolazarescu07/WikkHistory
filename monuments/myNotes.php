@@ -27,6 +27,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Notes | WikkHistory</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -38,8 +39,7 @@ try {
 
         body {
             font-family: 'Titillium Web', sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.92)), 
-                        url('../img/background.jpg');
+            background: linear-gradient(rgba(0,0,0,0.92), rgba(0,0,0,0.92)), url('../img/background.jpg');
             background-size: cover; background-attachment: fixed;
             color: white; margin: 0; padding: 20px;
         }
@@ -56,7 +56,7 @@ try {
         }
 
         h1 { 
-            font-family: 'Cinzel', serif; 
+            font-family: 'Titillium Web', serif; 
             color: var(--gold); 
             margin: 0; 
             font-size: 1.8rem; 
@@ -75,7 +75,7 @@ try {
 
         .btn-back:hover { 
             background: var(--gold); 
-            color: black; 
+            color: #1a1212; 
         }
 
         .notes-grid {
@@ -109,7 +109,7 @@ try {
         }
 
         .monument-name {
-            font-family: 'Cinzel', serif;
+            font-family: 'Titillium Web', serif;
             color: var(--gold);
             font-size: 1.1rem;
             margin: 0;
@@ -163,7 +163,7 @@ try {
 
 <div class="container">
     <div class="header">
-        <h1><i class="fa fa-scroll"></i> My Archaeology Diary</h1>
+        <h1><i class="fa fa-scroll"></i> MY ARCHEOLOGY DIARY</h1>
         <a href="../dashboard.php" class="btn-back"><i class="fa fa-map-marked-alt"></i> Back To Map</a>
     </div>
 

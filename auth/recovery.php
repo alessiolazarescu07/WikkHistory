@@ -11,9 +11,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $token = bin2hex(random_bytes(32));
         $pdo->prepare("UPDATE users SET reset_token = ? WHERE email = ?")->execute([$token, $email]);
         // Qui andrebbe la funzione mail()
-        $msg = "Se l'email esiste, abbiamo inviato un link di recupero (Simulato).";
+        $msg = "We have sent a recovery link (Simulated).";
     } else {
-        $msg = "Email non trovata.";
+        $msg = "Email address not found.";
     }
 }
 ?>
@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Recovery | WikkHistory</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -122,8 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         button:hover {
-            background: #1a1212;
-            color: #aa8b56;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
             border: #aa8b56 1px solid;
         }
 
@@ -153,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form method="POST">
             <div class="input-group">
                 <i class="fa fa-envelope"></i>
-                <input type="email" name="email" placeholder="Email" required>
+                <input type="email" name="email" placeholder="Enter your email address to receive a recovery link" required>
             </div>
             <button type="submit">SEND RECOVERY LINK</button>
         </form>

@@ -24,7 +24,8 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WikkHistory | Archeo-Dashboard</title>
+    <title>Archeo-Dashboard | WikkHistory</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -438,7 +439,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             const popupContent = `
                 <div style="min-width: 200px;">
                     <img src="${loc.img}" class="popup-img" alt="${loc.name}" onerror="this.src='https://via.placeholder.com/200x120?text=Immagine+Archeologica'">
-                    <b style="font-size:1.1rem; display:block; margin-bottom:5px;">${loc.name}</b>
+                    <b style="font-size:1.1rem; display:block; margin-bottom:5px; font-family: 'Titillium Web', sans-serif;">${loc.name}</b>
                     <button class="popup-btn" onclick="openNotes('${loc.id}', '${loc.name.replace(/'/g, "\\'")}')">
                         <i class="fa fa-pen-nib"></i> Details & Notes
                     </button>

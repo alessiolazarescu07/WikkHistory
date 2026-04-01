@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: dashboard.php");
             exit();
         } else {
-            $error_msg = "Credenziali errate.";
+            $error_msg = "Wrong credentials. Try again.";
         }
     }
 }
@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | WikkHistory</title>
+    <link rel="icon" type="image/x-icon" href="img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -152,8 +153,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Titillium Web', sans-serif;
         }
         .login-btn:hover {
-            background: #1a1212;
-            color: #aa8b56;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
             border: #aa8b56 1px solid;
         }
 

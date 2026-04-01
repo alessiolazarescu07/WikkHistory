@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conf_pass = $_POST['confirm_password'];
 
     if ($pass !== $conf_pass) {
-        $msg = "Le password non coincidono!";
+        $msg = "Passwords do not match.";
         $status = "error";
     } else {
         $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
@@ -20,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("INSERT INTO users (nome, cognome, username, email, password) VALUES (?, ?, ?, ?, ?)");
         try {
             $stmt->execute([$nome, $cognome, $user, $email, $hashed_pass]);
-            $msg = "Registrazione completata! <a href='../index.php' style='color:#fff;'>Accedi ora</a>";
+            $msg = "Registration completed! <a href='../index.php' style='color:#fff;'>Login now</a>";
             $status = "success";
         } catch (Exception $e) {
-            $msg = "Errore: Username o Email già esistenti.";
+            $msg = "Error: Username or Email already exist.";
             $status = "error";
         }
     }
@@ -35,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | WikkHistory</title>
+    <link rel="icon" type="image/x-icon" href="../img/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -157,8 +158,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .register-btn:hover {
-            background: #1a1212;
-            color: #aa8b56;
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
             border: #aa8b56 1px solid;
         }
 
