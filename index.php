@@ -177,16 +177,110 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
         }
 
-        @media (max-width: 850px) {
+        .logo-mobile {
+            display: none;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .login-card {
+                width: 95%;
+                height: auto;
+            }
+        }
+
+        @media screen and (max-width: 932px) and (orientation: landscape) {
+            .login-card {
+                width: 95%;
+                height: 96vh; 
+                display: flex; 
+            }
+
+            .left-panel {
+                padding: 20px;
+                flex: 0.8;    
+            }
+
+            .right-panel {
+                flex: 1.5;
+                padding: 20px 40px; 
+                overflow-y: auto;  
+            }
+
+            .right-panel::-webkit-scrollbar {
+                display: none;
+            }
+
+            .right-panel h2 {
+                font-size: 1.5rem;
+                margin-top: 0;
+                margin-bottom: 15px;
+                display: block !important;
+            }
+            
+            .input-group {
+                margin-bottom: 10px; 
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
+            }
+
+            body::-webkit-scrollbar {
+                display: none;
+            }
+
             .login-card { 
                 flex-direction: column; 
                 width: 90%; 
                 height: auto; 
             }
 
-            .left-panel { 
+            .left-panel {
                 border-right: none; 
-                border-bottom: 1px solid rgba(170,139,86,0.2);
+                border-bottom: 1px solid rgba(170,139,86,0.2); 
+            }
+
+            .right-panel {
+                padding: 30px 25px;
+                flex: none;
+            }
+
+            .right-panel h2 {
+                font-size: 1.8rem;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .logo-icon {
+                display: none;
+            }
+
+            .logo-mobile {
+                display: flex;
+                width: 90%;
+            }
+
+            .input-group input {
+                padding: 14px 15px 14px 50px; 
+                font-size: 16px;
+            }
+
+            .login-btn {
+                font-size: 1.1rem;
+                padding: 14px;
+                margin-top: 10px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+                font-size: 0.85rem;
+                margin-top: 25px;
+                line-height: 1.5;
             }
         }
     </style>
@@ -196,6 +290,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="login-card">
         <div class="left-panel">
             <img src="img/logo.png" alt="WikkHistory" class="logo-icon">
+            <img src="img/wordmark.png" alt="" class="logo-mobile">
         </div>
 
         <div class="right-panel">

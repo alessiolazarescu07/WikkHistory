@@ -77,12 +77,10 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             z-index: 1002;
         }
 
-        .sidebar h2 { 
-            font-family: 'Titillium Web', serif; 
-            color: var(--gold); 
-            text-align: center; 
+        .sidebar .logo { 
+            align-items: center;
+            margin-top: 40px;
             margin-bottom: 40px; 
-            font-size: 1.8rem; 
         }
         
         .nav-link { 
@@ -306,27 +304,63 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
         /* --- RESPONSIVE DESIGN --- */
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { position: fixed; left: -100%; width: 100%; height: 100vh; top: 0; padding-top: 80px; }
-            .sidebar.active { left: 0; }
-            .mobile-header { display: flex; }
-            .main-content { padding: 100px 20px 40px 20px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
-            .close-menu { position: absolute; top: 25px; right: 25px; font-size: 2rem; color: var(--gold); display: block; }
+            body {
+                flex-direction: column; 
+            }
+
+            .sidebar {
+                position: fixed; 
+                left: -100%; 
+                width: 100%; 
+                height: 100vh; 
+                top: 0; 
+                padding-top: 80px; 
+            }
+
+            .sidebar.active { 
+                left: 0; 
+            }
+
+            .mobile-header { 
+                display: flex; 
+            }
+
+            .main-content { 
+                padding: 100px 20px 40px 20px; 
+            }
+            .dashboard-grid { 
+                grid-template-columns: 1fr; 
+            }
+
+            .close-menu { 
+                position: absolute; 
+                top: 25px; 
+                right: 25px; 
+                font-size: 2rem; 
+                color: var(--gold); 
+                display: block; 
+            }
+
+            .logo {
+                display: none;
+            }
+            
+            .logo-mobile {
+                width: 150px;
+                align-self: center
+            }
         }
-        
     </style>
 </head>
 <body>
-
     <div class="mobile-header">
-        <span style="font-family:'Titillium Web'; color:var(--gold); font-size:1.2rem; font-weight: bold;">WIKKHISTORY</span>
+        <img class="logo-mobile" src="img/wordmark.png" alt="">
         <i class="fa fa-bars" style="font-size:1.5rem; color:var(--gold); cursor:pointer;" onclick="toggleSidebar()"></i>
     </div>
 
     <div class="sidebar" id="sidebar">
         <i class="fa fa-times close-menu" onclick="toggleSidebar()"></i>
-        <h2>WIKKHISTORY</h2>
+        <img class="logo" src="img/wordmark.png" alt="">
         <nav>
             <a class="nav-link active"><i class="fa fa-home"></i> Home Page</a>
             <a href="monuments/myNotes.php" class="nav-link"><i class="fa fa-book"></i> My Notes</a>

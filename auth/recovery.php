@@ -106,6 +106,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0 0 20px rgba(170, 139, 86, 0.2);
         }
 
+        .input-group-mobile {
+            display: none;
+        }
+
         button { 
             width: 100%;
             background: #aa8b56;
@@ -145,6 +149,94 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
         }
 
+        @media screen and (max-width: 1024px) {
+            .card {
+                width: 75%;
+                height: auto;
+            }
+        }
+
+        @media screen and (max-width: 932px) and (orientation: landscape) {
+            .card {
+                width: 75%;
+                height: auto; 
+                display: flex; 
+            }
+            
+            .input-group {
+                margin-bottom: 10px;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+                margin-top: 0;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .card { 
+                width: 90%; 
+                height: auto; 
+                padding: 30px 25px;
+            }
+
+            h3 {
+                font-size: 1.8rem;
+                text-align: center;
+                margin-bottom: 25px;
+            }
+
+            .input-group {
+                display: none;
+            }
+
+            .input-group-mobile {
+                display: block;
+                position: relative;
+                margin-bottom: 15px;
+            }
+
+            .input-group-mobile i {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #aa8b56;
+                font-size: 1.1rem;
+            }
+
+            .input-group-mobile input {
+                width: 100%;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 14px 15px 14px 50px; 
+                border-radius: 12px;
+                color: white;
+                font-size: 16px;
+                font-family: inherit;
+                transition: all 0.3s ease;
+            }
+
+            .input-group-mobile input:focus {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: #aa8b56;
+                outline: none;
+                box-shadow: 0 0 20px rgba(170, 139, 86, 0.2);
+            }
+
+            button {
+                font-size: 1.1rem;
+                padding: 14px;
+                margin-top: 10px;
+            }
+
+            .footer-links {
+                font-size: 0.85rem;
+                margin-top: 25px;
+                line-height: 1.5;
+            }
+        }
     </style>
 </head>
 <body>
@@ -155,6 +247,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="input-group">
                 <i class="fa fa-envelope"></i>
                 <input type="email" name="email" placeholder="Enter your email address to receive a recovery link" required>
+            </div>
+            <div class="input-group-mobile">
+                <i class="fa fa-envelope"></i>
+                <input type="email" name="email" placeholder="Enter email for recovery link" required>
             </div>
             <button type="submit">SEND RECOVERY LINK</button>
         </form>
