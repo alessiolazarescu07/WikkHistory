@@ -102,6 +102,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
         }
 
+        .right-panel h2::selection {
+            background-color: #aa8b56
+        }
+
         .input-row {
             display: flex;
             gap: 15px;
@@ -134,6 +138,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: all 0.3s ease;
         }
 
+        .input-group input::selection {
+            background-color: #aa8b56;
+            color: white;
+        }
+
         .input-group input:focus {
             background: rgba(255, 255, 255, 0.1);
             border-color: #aa8b56;
@@ -155,6 +164,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-transform: uppercase;
             margin-top: 5px;
             font-family: 'Titillium Web', sans-serif;
+        }
+
+        .register-btn::selection {
+            background-color: #1a1212;
+            color: #aa8b56;
         }
 
         .register-btn:hover {
@@ -197,6 +211,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .footer-links a:hover{
             color: #fff;
+        }
+
+        .footer-links ::selection {
+            background-color: #aa8b56;
+            color: rgba(255,255,255,0.6);
         }
 
         .logo-mobile {

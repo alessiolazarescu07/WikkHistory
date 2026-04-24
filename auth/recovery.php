@@ -73,6 +73,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #fff;
         }
 
+        h3::selection {
+            background-color: #aa8b56
+        }
+
         .input-group {
             position: relative;
             margin-bottom: 15px;
@@ -97,6 +101,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-size: 0.95rem;
             font-family: inherit;
             transition: all 0.3s ease;
+        }
+
+        .input-group input::selection {
+            background-color: #aa8b56;
+            color: white
         }
 
         .input-group input:focus {
@@ -126,6 +135,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Titillium Web', sans-serif;
         }
 
+        button::selection {
+            background-color: #1a1212;
+            color: #aa8b56;
+        }
+
         button:hover {
             background: rgba(255, 255, 255, 0.08);
             color: white;
@@ -147,6 +161,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .footer-links a:hover{
             color: #fff;
+        }
+
+        .footer-links::selection {
+            background-color: #aa8b56;
+            color: rgba(255,255,255,0.6);
         }
 
         @media screen and (max-width: 1024px) {

@@ -157,6 +157,13 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             z-index: 1;
         }
 
+        .map-container { 
+            position: relative; 
+        }
+
+        .map-overlay-btn, .close-map-btn { 
+            display: none; 
+        }
         .activity-feed { 
             background: var(--glass); 
             border-radius: 20px; 
@@ -220,6 +227,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             align-items: center; 
             justify-content: center; 
             padding: 20px; 
+            z-index: 10001 !important; /* Più alto del 9999 della mappa */
         }
 
         .modal-content { 
@@ -302,8 +310,77 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             cursor: pointer; 
         }
 
+        /* --- RESPONSIVE TABLET (max 1024px) --- */
+        @media screen and (max-width: 1024px) {
+            .sidebar { width: 220px; }
+            .dashboard-grid { grid-template-columns: 1fr; } /* Mappa e attività una sopra l'altra */
+            .main-content { padding: 30px; }
+        }
+
+        /* --- SMARTPHONE ORIZZONTALE (max 932px) --- */
+        @media screen and (max-width: 932px) and (orientation: landscape) {
+            body { flex-direction: column; }
+
+            /* Header Mobile più sottile in orizzontale */
+            .mobile-header { 
+                display: flex; 
+                z-index: 2100;
+            }
+
+            /* Logo rimpicciolito drasticamente */
+            .logo-mobile {
+                width: 110px; /* Ridotto da 150px */
+                height: auto;
+            }
+
+            .sidebar { 
+                position: fixed; 
+                left: -100%; 
+                width: 100%;
+                top: 0; 
+                padding-top: 80px; 
+                z-index: 2000;
+                box-shadow: 10px 0 30px rgba(0,0,0,0.8);
+                border-right: none;
+                border-top: 1px solid var(--gold); /* Linea di separazione dalla navbar */
+                transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            
+            .sidebar.active { left: 0; }
+
+            /* Riduciamo il margine del contenuto principale per l'header più piccolo */
+            .main-content { 
+                padding: 75px 20px 20px 20px; 
+            }
+
+            /* Ottimizzazione titoli per risparmiare spazio verticale */
+            .main-content h1 {
+                font-size: 1.5rem !important;
+                margin-bottom: 20px !important;
+            }
+
+            /* Stats in linea anche qui per salvare spazio */
+            .stats-row { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 10px;
+            }
+
+            .logo {
+                display: none;
+            }
+            
+            .nav-link {
+                padding: 10px 15px; /* Menu più compatto */
+                margin-bottom: 5px;
+    }
+        }
+
         /* --- RESPONSIVE DESIGN --- */
-        @media (max-width: 768px) {
+        @media screen and (max-width: 480px) {
             body {
                 flex-direction: column; 
             }
@@ -349,20 +426,152 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 width: 150px;
                 align-self: center
             }
-        }
+
+           .stats-row { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 10px; 
+                align-items: start; /* Importante per permettere alle card di crescere singolarmente */
+                margin-bottom: 25px;
+            }
+
+            .stat-card { 
+                padding: 10px 5px;
+                min-height: 60px; /* Altezza contratta (solo icona e numero) */
+                height: auto;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Effetto rimbalzo */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            .stat-card i { 
+                font-size: 1.1rem; 
+                margin-bottom: 2px;
+                transition: transform 0.3s ease;
+            }
+
+            .stat-card h3 { 
+                font-size: 0.9rem; 
+                margin: 0; 
+            }
+
+            /* Testo nascosto e rimpicciolito */
+            .stat-card p { 
+                font-size: 0.55rem;
+                text-transform: uppercase;
+                font-weight: bold;
+                margin: 0;
+                opacity: 0;
+                max-height: 0;
+                transform: scale(0.8);
+                transition: all 0.3s ease;
+            }
+
+            /* Stato di espansione al tocco/hover */
+            .stat-card:hover, .stat-card:active { 
+                min-height: 90px; /* Si allunga per ospitare il testo */
+                border-color: var(--gold-bright);
+                background: rgba(170, 139, 86, 0.2); /* Colore oro leggero */
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            }
+
+            .stat-card:hover i, .stat-card:active i {
+                transform: translateY(-2px); /* L'icona sale un po' */
+            }
+
+            .stat-card:hover p, .stat-card:active p { 
+                opacity: 1;
+                max-height: 40px;
+                margin-top: 8px;
+                transform: scale(1);
+            }
+                
+        /* Logica Mappa Ridotta */
+            .map-section h2 { font-size: 1rem; }
+            #map { 
+                height: 200px; /* Altezza ridotta come richiesto */
+                filter: grayscale(0.5);
+                pointer-events: none; /* Impedisce interazione accidentale nello scroll */
+            }
+            
+            .map-container {
+                position: relative;
+                border-radius: 20px;
+                overflow: hidden;
+            }
+
+            .map-overlay-btn {
+                display: flex !important;
+                position: absolute;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.4);
+                z-index: 10;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            
+            .map-overlay-btn span {
+                background: var(--gold);
+                color: black;
+                padding: 10px 20px;
+                border-radius: 50px;
+                font-weight: bold;
+                font-size: 0.8rem;
+                text-transform: uppercase;
+            }
+
+            /* Stato Full Screen per Mobile */
+            .map-fullscreen {
+                position: fixed !important;
+                top: 0; left: 0; width: 100vw !important; height: 100vh !important;
+                z-index: 9999 !important;
+                border-radius: 0 !important;
+                pointer-events: auto !important;
+            }
+
+            /* Assicurati che i popup di Leaflet siano sopra tutto dentro la mappa */
+            .leaflet-pane {
+                z-index: 400 !important;
+            }
+            
+            .leaflet-top, .leaflet-bottom {
+                z-index: 1000 !important;
+            }
+
+            .close-map-btn {
+                display: none;
+                position: fixed;
+                top: 20px; right: 20px;
+                z-index: 10000;
+                background: var(--gold);
+                color: black;
+                width: 40px; height: 40px;
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            }
+
+            .modal-content { width: 95%; padding: 20px; }
+            }
     </style>
 </head>
 <body>
     <div class="mobile-header">
-        <img class="logo-mobile" src="img/wordmark.png" alt="">
+        <img class="logo-mobile" src="img/wordmark.png" alt="logo">
         <i class="fa fa-bars" style="font-size:1.5rem; color:var(--gold); cursor:pointer;" onclick="toggleSidebar()"></i>
     </div>
 
     <div class="sidebar" id="sidebar">
         <i class="fa fa-times close-menu" onclick="toggleSidebar()"></i>
-        <img class="logo" src="img/wordmark.png" alt="">
+        <img class="logo" src="img/wordmark.png" alt="logo">
         <nav>
             <a class="nav-link active"><i class="fa fa-home"></i> Home Page</a>
+            <a href="monuments/monuments.php" class="nav-link"><i class="fa fa-university"></i> Monuments</a>
             <a href="monuments/myNotes.php" class="nav-link"><i class="fa fa-book"></i> My Notes</a>
         </nav>
         <a href="logout.php" style="margin-top:auto; color:#ff4d4d; text-decoration:none; padding:15px;"><i class="fa fa-sign-out-alt"></i> Logout</a>
@@ -376,7 +585,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
         </div>
 
         <div class="stats-row">
-            <div class="stat-card"><i class="fa fa-map-marked-alt"></i><h3>17</h3><p>Archealogical Sites</p></div>
+            <div class="stat-card" onclick="window.location.href='monuments/monuments.php'" style="cursor: pointer;"><i class="fa fa-map-marked-alt"></i><h3>17</h3><p>Archealogical Sites</p></div>
             <div class="stat-card" onclick="window.location.href='monuments/myNotes.php'" style="cursor: pointer;"><i class="fa fa-pen-nib"></i><h3 id="stat-notes"><?php echo $totalNotes; ?></h3><p>Saved Notes</p></div>
             <div class="stat-card"><i class="fa fa-star"></i><h3 id="stat-rating"><?php echo $avgRating; ?></h3><p>Average Rating</p></div>
         </div>
@@ -384,7 +593,16 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
         <div class="dashboard-grid">
             <div class="map-section">
                 <h2 style="font-family:'Titillium Web'; margin-bottom:15px; font-size:1.3rem; border-left: 3px solid var(--gold); padding-left: 15px; font-weight: bold; color: var(--gold);">AUGUSTA TAURINORUM MAP</h2>
-                <div id="map"></div>
+                <div class="map-container">
+                    <div id="closeMap" class="close-map-btn" onclick="toggleMapFullscreen()">
+                        <i class="fa fa-times"></i>
+                    </div>
+                    
+                    <div class="map-overlay-btn" id="mapOverlay" onclick="toggleMapFullscreen()">
+                        <span><i class="fa fa-expand"></i> Open Full Map</span>
+                    </div>
+                    <div id="map"></div>
+                </div>
             </div>
 
             <div class="activity-feed">
@@ -469,6 +687,13 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             { id: 'torre_consolata', name: "Torre Angolare", coords: [45.0763, 7.6795], img: "img/monuments/torre_consolata.jpg" }
         ];
 
+        const myPin = L.icon({
+            iconUrl: 'img/pin-mappa.png',
+            iconSize: [38, 38],
+            iconAnchor: [19, 38],
+            popupAnchor: [0, -35]
+        });
+
         monumenti.forEach(loc => {
             const popupContent = `
                 <div style="min-width: 200px;">
@@ -479,7 +704,7 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                     </button>
                 </div>
             `;
-            L.marker(loc.coords).addTo(map).bindPopup(popupContent);
+            L.marker(loc.coords, { icon: myPin }).addTo(map).bindPopup(popupContent);
         });
 
         document.querySelectorAll('#ratingStars i').forEach(star => {
@@ -542,18 +767,18 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                     listContainer.innerHTML = "<p style='opacity:0.5; font-size:0.85rem; text-align:center; padding:10px;'>No notes available for this site</p>";
                 }
             } catch (e) {
-                listContainer.innerHTML = "<p style='color:red;'>Errore di connessione agli archivi.</p>";
+                listContainer.innerHTML = "<p style='color:red;'>Network error while fetching notes.</p>";
                 console.error(e);
             }
         }
 
         function saveData() {
             const note = document.getElementById('noteText').value.trim();
-            if(!note) { alert("Inserisci un testo per la nota!"); return; }
-            if(currentRating == 0) { alert("Seleziona una valutazione (stelle)!"); return; }
+            if(!note) { alert("Please enter a note!"); return; }
+            if(currentRating == 0) { alert("Please select a rating (stars)!"); return; }
 
             const btn = document.getElementById('btnSave');
-            btn.innerHTML = "Sincronizzazione... <i class='fa fa-spinner fa-spin'></i>";
+            btn.innerHTML = "Syncing... <i class='fa fa-spinner fa-spin'></i>";
             btn.disabled = true;
 
             const formData = new FormData();
@@ -568,15 +793,15 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 if(data.status === 'success') {
                     location.reload(); 
                 } else {
-                    alert("Errore: " + (data.message || "Impossibile salvare"));
-                    btn.innerHTML = "Riprova <i class='fa fa-sync'></i>";
+                    alert("Error: " + (data.message || "Unable to save"));
+                    btn.innerHTML = "Try again <i class='fa fa-sync'></i>";
                     btn.disabled = false;
                 }
             })
             .catch(err => {
-                alert("Errore di rete");
+                alert("Network error");
                 btn.disabled = false;
-                btn.innerHTML = "Riprova <i class='fa fa-sync'></i>";
+                btn.innerHTML = "Try again <i class='fa fa-sync'></i>";
             });
         }
 
@@ -588,6 +813,59 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
         window.onclick = function(event) {
             if (event.target == document.getElementById('notesModal')) closeModal();
         }
+
+        function toggleMapFullscreen() {
+            // Funziona solo su schermi piccoli
+            if (window.innerWidth > 480) return;
+
+            const mapElement = document.getElementById('map');
+            const overlay = document.getElementById('mapOverlay');
+            const closeBtn = document.getElementById('closeMap');
+
+            mapElement.classList.toggle('map-fullscreen');
+            
+            if (mapElement.classList.contains('map-fullscreen')) {
+                overlay.style.display = 'none';
+                closeBtn.style.display = 'flex';
+                // Forza il ridisegno della mappa Leaflet
+                setTimeout(() => { map.invalidateSize(); }, 300);
+            } else {
+                overlay.style.display = 'flex';
+                closeBtn.style.display = 'none';
+                setTimeout(() => { map.invalidateSize(); }, 300);
+            }
+        }
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const monumentId = urlParams.get('monument');
+
+            if (monumentId) {
+                // Cerchiamo il monumento nell'array monumenti
+                const target = monumenti.find(m => m.id === monumentId);
+                
+                if (target) {
+                    // 1. Centra la mappa sul monumento
+                    map.setView(target.coords, 17, { animate: true });
+
+                    // 2. Trova il marker e aprilo
+                    // Dobbiamo aver salvato i marker in un oggetto durante il loop forEach
+                    // Esempio se hai fatto: const markers = {}; monumenti.forEach(...) { markers[loc.id] = L.marker(...).addTo(map); }
+                    
+                    // Se non hai salvato i marker, un modo veloce è simulare il click:
+                    map.eachLayer((layer) => {
+                        if (layer instanceof L.Marker) {
+                            const latLng = layer.getLatLng();
+                            if (latLng.lat === target.coords[0] && latLng.lng === target.coords[1]) {
+                                layer.openPopup();
+                                
+                                // Opzionale: Se vuoi che apra direttamente anche la modale dei dettagli:
+                                // openNotes(target.id, target.name);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>

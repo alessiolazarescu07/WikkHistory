@@ -24,6 +24,6 @@ try {
         'notes' => $notes
     ]);
 } catch (PDOException $e) {
-    echo json_encode(['status' => 'error', 'message' => 'Errore database: ' . $e->getMessage()]);
+    echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage()]);
 }
 ?>

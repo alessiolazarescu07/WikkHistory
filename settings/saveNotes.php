@@ -6,7 +6,7 @@ require 'database.php';
 
 // Controllo sicurezza: l'utente deve essere loggato
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Sessione scaduta. Effettua il login.']);
+    echo json_encode(['status' => 'error', 'message' => 'Session expired. Please log in.']);
     exit();
 }
 
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rating = intval($_POST['rating'] ?? 0);
 
     if (empty($note_text) || $rating === 0) {
-        echo json_encode(['status' => 'error', 'message' => 'Dati incompleti']);
+        echo json_encode(['status' => 'error', 'message' => 'Incomplete data']);
         exit();
     }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$monument_id, $monument_name, $user_id, $user_name, $note_text, $rating]);
 
         // 2. Registrazione attività recente per la dashboard
-        $action = "Ha aggiunto una nota su: " . $monument_name;
+        $action = "You added a note for: " . $monument_name;
         $stmtAct = $pdo->prepare("INSERT INTO recent_activities (user_id, action_description) VALUES (?, ?)");
         $stmtAct->execute([$user_id, $action]);
 
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['status' => 'success']);
     } catch (Exception $e) {
         $pdo->rollBack();
-        echo json_encode(['status' => 'error', 'message' => 'Errore nel salvataggio: ' . $e->getMessage()]);
+        echo json_encode(['status' => 'error', 'message' => 'Saving error: ' . $e->getMessage()]);
     }
 }
 ?>
