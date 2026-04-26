@@ -1,5 +1,4 @@
 <?php
-// settings/getNotes.php
 header('Content-Type: application/json');
 require 'database.php';
 
@@ -11,7 +10,6 @@ if (!isset($_GET['id'])) {
 $monument_id = $_GET['id'];
 
 try {
-    // Recuperiamo le note ordinate dalla più recente
     $stmt = $pdo->prepare("SELECT user_name, note_text, rating, DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') as created_at 
                            FROM notes 
                            WHERE monument_id = ? 

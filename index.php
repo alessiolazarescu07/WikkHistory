@@ -9,17 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password_input = $_POST['password'];
 
     if (!empty($user_input) && !empty($password_input)) {
-        // Selezioniamo anche nome e cognome nella query
         $stmt = $pdo->prepare("SELECT id, username, email, password, nome, cognome FROM users WHERE username = ? OR email = ?");
         $stmt->execute([$user_input, $user_input]);
         $user = $stmt->fetch();
 
         if ($user && password_verify($password_input, $user['password'])) {
-            // Salviamo tutto in sessione
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
-            $_SESSION['nome'] = $user['nome'];       // <--- Fondamentale
-            $_SESSION['cognome'] = $user['cognome']; // <--- Fondamentale
+            $_SESSION['nome'] = $user['nome'];    
+            $_SESSION['cognome'] = $user['cognome']; 
             
             header("Location: dashboard.php");
             exit();
@@ -40,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* RESET & BASE */
         * { 
             box-sizing: border-box; 
             margin: 0; 
@@ -59,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             overflow: hidden;
         }
 
-        /* CARD PRINCIPALE */
         .login-card {
             display: flex;
             width: 900px;

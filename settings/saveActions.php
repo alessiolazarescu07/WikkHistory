@@ -13,14 +13,12 @@ $rating = (int)$_POST['rating'];
 $monument_name = $_POST['monument_name'];
 
 try {
-    // 1. Inserisce o aggiorna l'appunto
     $sql = "INSERT INTO notes (user_id, monument_id, note_text, rating) 
             VALUES (?, ?, ?, ?) 
             ON DUPLICATE KEY UPDATE note_text = VALUES(note_text), rating = VALUES(rating)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$user_id, $monument_id, $note_text, $rating]);
 
-    // 2. Registra l'attività (per il feed della dashboard)
     $action_desc = "Updated notes for $monument_name (Rating: $rating/5)";
     $stmt_act = $pdo->prepare("INSERT INTO recent_activities (action_description, created_at) VALUES (?, NOW())");
     $stmt_act->execute([$action_desc]);

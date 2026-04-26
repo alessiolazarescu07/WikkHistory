@@ -236,22 +236,18 @@ $fullName = $_SESSION['nome'] . " " . $_SESSION['cognome'];
             }
         }
 
-        /* --- SMARTPHONE ORIZZONTALE (max 932px) --- */
         @media screen and (max-width: 932px) and (orientation: landscape) {
             body {
                 flex-direction: column;
             }
 
-            /* Header Mobile più sottile in orizzontale */
             .mobile-header {
                 display: flex;
                 z-index: 2100;
             }
 
-            /* Logo rimpicciolito drasticamente */
             .logo-mobile {
                 width: 110px;
-                /* Ridotto da 150px */
                 height: auto;
             }
 
@@ -265,7 +261,6 @@ $fullName = $_SESSION['nome'] . " " . $_SESSION['cognome'];
                 box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
                 border-right: none;
                 border-top: 1px solid var(--gold);
-                /* Linea di separazione dalla navbar */
                 transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
@@ -273,12 +268,10 @@ $fullName = $_SESSION['nome'] . " " . $_SESSION['cognome'];
                 left: 0;
             }
 
-            /* Riduciamo il margine del contenuto principale per l'header più piccolo */
             .main-content {
                 padding: 75px 20px 20px 20px;
             }
 
-            /* Ottimizzazione titoli per risparmiare spazio verticale */
             .main-content h1 {
                 font-size: 1.5rem !important;
                 margin-bottom: 20px !important;

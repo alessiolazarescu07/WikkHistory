@@ -2,7 +2,6 @@
 session_start();
 require 'settings/database.php';
 
-// Reindirizzamento se non loggato
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -11,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $fullName = $_SESSION['nome'] . " " . $_SESSION['cognome'];
 
-// 1. Recupero Statistiche dal DB
 $stmtStats = $pdo->prepare("SELECT COUNT(*) as total_notes, AVG(rating) as avg_rating FROM notes WHERE user_id = ?");
 $stmtStats->execute([$user_id]);
 $stats = $stmtStats->fetch(PDO::FETCH_ASSOC);
@@ -190,7 +188,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             border-color: var(--gold);
         }
 
-        /* --- POPUP MAPPA --- */
         .leaflet-popup-content-wrapper {
             background: #1a1a1a;
             color: white;
@@ -228,7 +225,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             background: white;
         }
 
-        /* --- MODALE --- */
         .modal {
             display: none;
             position: fixed;
@@ -243,7 +239,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             justify-content: center;
             padding: 20px;
             z-index: 10001 !important;
-            /* Più alto del 9999 della mappa */
         }
 
         .modal-content {
@@ -360,7 +355,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 z-index: 2100;
             }
 
-            /* 4. Facciamo apparire la "X" per chiudere il menu dentro la sidebar */
             .close-menu {
                 display: block !important;
                 position: absolute;
@@ -383,22 +377,18 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             }
         }
 
-        /* --- SMARTPHONE ORIZZONTALE (max 932px) --- */
         @media screen and (max-width: 932px) and (orientation: landscape) and (max-height: 500px) {
             body {
                 flex-direction: column;
             }
 
-            /* Header Mobile più sottile in orizzontale */
             .mobile-header {
                 display: flex;
                 z-index: 2100;
             }
 
-            /* Logo rimpicciolito drasticamente */
             .logo-mobile {
                 width: 110px;
-                /* Ridotto da 150px */
                 height: auto;
             }
 
@@ -419,18 +409,15 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 left: 0;
             }
 
-            /* Riduciamo il margine del contenuto principale per l'header più piccolo */
             .main-content {
                 padding: 75px 20px 20px 20px;
             }
 
-            /* Ottimizzazione titoli per risparmiare spazio verticale */
             .main-content h1 {
                 font-size: 1.5rem !important;
                 margin-bottom: 20px !important;
             }
 
-            /* Stats in linea anche qui per salvare spazio */
             .stats-row {
                 grid-template-columns: repeat(1, 1fr);
                 gap: 10px;
@@ -505,7 +492,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 text-transform: uppercase;
             }
 
-            /* Stato Full Screen per Mobile */
             .map-fullscreen {
                 position: fixed !important;
                 top: 0;
@@ -518,7 +504,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 border: none !important;
             }
 
-            /* Assicurati che i popup di Leaflet siano sopra tutto dentro la mappa */
             .leaflet-pane {
                 z-index: 400 !important;
             }
@@ -551,12 +536,10 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
 
             .nav-link {
                 padding: 10px 15px;
-                /* Menu più compatto */
                 margin-bottom: 5px;
             }
         }
 
-        /* --- RESPONSIVE DESIGN --- */
         @media screen and (max-width: 480px) {
             body {
                 flex-direction: column;
@@ -611,17 +594,14 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
                 align-items: start;
-                /* Importante per permettere alle card di crescere singolarmente */
                 margin-bottom: 25px;
             }
 
             .stat-card {
                 padding: 10px 5px;
                 min-height: 60px;
-                /* Altezza contratta (solo icona e numero) */
                 height: auto;
                 transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                /* Effetto rimbalzo */
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -640,7 +620,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 margin: 0;
             }
 
-            /* Testo nascosto e rimpicciolito */
             .stat-card p {
                 font-size: 0.55rem;
                 text-transform: uppercase;
@@ -652,21 +631,17 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 transition: all 0.3s ease;
             }
 
-            /* Stato di espansione al tocco/hover */
             .stat-card:hover,
             .stat-card:active {
                 min-height: 90px;
-                /* Si allunga per ospitare il testo */
                 border-color: var(--gold-bright);
                 background: rgba(170, 139, 86, 0.2);
-                /* Colore oro leggero */
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             }
 
             .stat-card:hover i,
             .stat-card:active i {
                 transform: translateY(-2px);
-                /* L'icona sale un po' */
             }
 
             .stat-card:hover p,
@@ -677,17 +652,14 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 transform: scale(1);
             }
 
-            /* Logica Mappa Ridotta */
             .map-section h2 {
                 font-size: 1rem;
             }
 
             #map {
                 height: 200px;
-                /* Altezza ridotta come richiesto */
                 filter: grayscale(0.5);
                 pointer-events: none;
-                /* Impedisce interazione accidentale nello scroll */
             }
 
             .map-container {
@@ -720,7 +692,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 text-transform: uppercase;
             }
 
-            /* Stato Full Screen per Mobile */
             .map-fullscreen {
                 position: fixed !important;
                 top: 0;
@@ -733,7 +704,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
                 border: none !important;
             }
 
-            /* Assicurati che i popup di Leaflet siano sopra tutto dentro la mappa */
             .leaflet-pane {
                 z-index: 400 !important;
             }
@@ -895,7 +865,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        // Inizializzazione Mappa
         const map = L.map('map').setView([45.0715, 7.6840], 15);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap'
@@ -955,7 +924,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
         }
 
         async function openNotes(id, name) {
-            // Chiudi sidebar se mobile
             const sidebar = document.getElementById('sidebar');
             if (sidebar.classList.contains('active')) sidebar.classList.remove('active');
 
@@ -1043,13 +1011,11 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             document.getElementById('notesModal').style.display = 'none';
         }
 
-        // Chiudi modale cliccando fuori
         window.onclick = function (event) {
             if (event.target == document.getElementById('notesModal')) closeModal();
         }
 
         function toggleMapFullscreen() {
-            // Funziona solo su schermi piccoli
             if (window.innerWidth > 932) return;
 
             const mapElement = document.getElementById('map');
@@ -1061,7 +1027,6 @@ $avgRating = number_format($stats['avg_rating'] ?? 0, 1);
             if (mapElement.classList.contains('map-fullscreen')) {
                 overlay.style.display = 'none';
                 closeBtn.style.display = 'flex';
-                // Forza il ridisegno della mappa Leaflet
                 setTimeout(() => { map.invalidateSize(); }, 300);
             } else {
                 overlay.style.display = 'flex';

@@ -2,7 +2,6 @@
 session_start();
 require '../settings/database.php';
 
-// 1. Protezione pagina: Reindirizzamento se non loggato
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");
     exit();
@@ -10,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// 2. Recupero note: Usiamo 'monument_name' e 'created_at' che abbiamo allineato nel DB
 try {
     $stmt = $pdo->prepare("SELECT * FROM notes WHERE user_id = ? ORDER BY created_at DESC");
     $stmt->execute([$user_id]);
@@ -53,9 +51,7 @@ try {
             color: white;
             margin: 0;
             display: flex;
-            /* Allineamento orizzontale */
             min-height: 100vh;
-            /* Altezza minima intero schermo */
             overflow-x: hidden;
         }
 
@@ -291,22 +287,18 @@ try {
             }
         }
 
-        /* --- SMARTPHONE ORIZZONTALE (max 932px) --- */
         @media screen and (max-width: 932px) and (orientation: landscape) {
             body {
                 flex-direction: column;
             }
 
-            /* Header Mobile più sottile in orizzontale */
             .mobile-header {
                 display: flex;
                 z-index: 2100;
             }
 
-            /* Logo rimpicciolito drasticamente */
             .logo-mobile {
                 width: 110px;
-                /* Ridotto da 150px */
                 height: auto;
             }
 
@@ -320,7 +312,6 @@ try {
                 box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
                 border-right: none;
                 border-top: 1px solid var(--gold);
-                /* Linea di separazione dalla navbar */
                 transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
@@ -328,12 +319,10 @@ try {
                 left: 0;
             }
 
-            /* Riduciamo il margine del contenuto principale per l'header più piccolo */
             .container {
                 padding: 75px 20px 20px 20px;
             }
 
-            /* Ottimizzazione titoli per risparmiare spazio verticale */
             .container h1 {
                 font-size: 1.5rem !important;
             }

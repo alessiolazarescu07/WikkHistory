@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status = "error";
     } else {
         $hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
-        // Query aggiornata con nome e cognome
         $stmt = $pdo->prepare("INSERT INTO users (nome, cognome, username, email, password) VALUES (?, ?, ?, ?, ?)");
         try {
             $stmt->execute([$nome, $cognome, $user, $email, $hashed_pass]);
@@ -61,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .register-card {
             display: flex;
             width: 950px;
-            height: 650px; /* Aumentata leggermente per i nuovi campi */
+            height: 650px; 
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);

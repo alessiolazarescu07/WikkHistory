@@ -1,10 +1,8 @@
 <?php
-// settings/saveNotes.php
 session_start();
 header('Content-Type: application/json');
 require 'database.php';
 
-// Controllo sicurezza: l'utente deve essere loggato
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['status' => 'error', 'message' => 'Session expired. Please log in.']);
     exit();
@@ -26,11 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
 
-        // 1. Inserimento della nota
         $stmt = $pdo->prepare("INSERT INTO notes (monument_id, monument_name, user_id, user_name, note_text, rating) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->execute([$monument_id, $monument_name, $user_id, $user_name, $note_text, $rating]);
 
-        // 2. Registrazione attività recente per la dashboard
         $action = "You added a note for: " . $monument_name;
         $stmtAct = $pdo->prepare("INSERT INTO recent_activities (user_id, action_description) VALUES (?, ?)");
         $stmtAct->execute([$user_id, $action]);
