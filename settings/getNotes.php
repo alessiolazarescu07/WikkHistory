@@ -4,7 +4,7 @@ header('Content-Type: application/json');
 require 'database.php';
 
 if (!isset($_GET['id'])) {
-    echo json_encode(['status' => 'error', 'message' => 'ID monumento mancante']);
+    echo json_encode(['status' => 'error', 'message' => 'Monument ID is required']);
     exit();
 }
 
